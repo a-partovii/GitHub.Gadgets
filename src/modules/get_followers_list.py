@@ -1,12 +1,20 @@
 import requests as req
 from modules.delay import delay
+from datetime import datetime
+import os
 
-# -------------------------------------------
+def get_followers_list(target_username, headers, output_type):
+    """
+    Fetch followers of the specified GitHub user.
 
-def get_followers_list(target_username, headers, output_type="list"):
+    Args:
+        target_username: Username of the account whose followers will be extracted
+        headers: Request headers (available from the token module)
+        output_type: "file" to save output, "list" to return as a list (default = list)
+    """
     page = 1
-    
     followers_list = []
+    
     while True:
         # per_page = 100, max items per request
         url = f"https://api.github.com/users/{target_username}/followers?per_page=100&page={page}"
@@ -28,11 +36,17 @@ def get_followers_list(target_username, headers, output_type="list"):
 
     if output_type == "file": # "file" or "list" (default=List)
         try:
-            with open(f"({target_username})followers.txt", "w") as file:
+            os.makedirs("outputs", exist_ok=True)# Create outputs folder if it doesn't exist
+           
+            current_date = datetime.now().strftime("%Y-%m-%d_%H;%M") # Get current date and time
+            filename = f"outputs/({target_username})followers [{current_date}].txt"
+            
+            with open(filename, "w") as file:
                 for username in followers_list:
                     file.write(username + "\n")
-        except :
-            print("Writing in the file was not success, check this error and try again: \n")
+            
+            print(f"Done! All follower usernames saved to {filename}")
+        except Exception as e:
+            print(f"Writing in the file was not successful, check this error and try again: \n{e}")
     else:
         return followers_list
-    print("Done! All follower usernames saved.")
