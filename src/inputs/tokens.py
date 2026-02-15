@@ -48,11 +48,16 @@ def token_manager(tokens_dict):
     """
     token_list = list(tokens_dict.values())
     length_token_list = len(token_list)
-    
     if not token_list:
-        print(f"Error: looks {tokens_dict} is empty or invalid!")
-        return None
-    
+        # If "token_list" was empty try primary token, works for "secondary_tokens"
+        if primary_token:
+            token_list = list(primary_token.values())
+            length_token_list = len(token_list)
+            
+        else:
+            print("Error: both primary and secondary tokens are empty!")
+            return None
+        
     # If there is only one token, just return it
     elif length_token_list == 1:
         return token_list[0]
