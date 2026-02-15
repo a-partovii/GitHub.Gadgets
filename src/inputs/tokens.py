@@ -10,7 +10,9 @@ The secondary tokens are only used for doing background tasks.
 
 Using secondary tokens is optional, but recommended.
 """
-import random
+
+from modules.read_txt_file import read_txt_file
+from modules.write_in_file import write_in_file
 
 # The main GitHub personal access token for modifying tasks
 primary_token = {
@@ -31,21 +33,35 @@ def headeres(token):
         "Accept": "application/vnd.github+json"
     }
 
-# Tracking last used token to avoid repeats
-last_token = None
-def random_token(tokens_dict=secondary_tokens):
+def token_manager(tokens_dict):
     """
-    Select a random token from the dictionary, 
-    ensuring it's not the same as the last one.
-    """
-    global last_token
-    tokens_list = list(tokens_dict.values())
+    Manages round-robin rotation of non-duplicate tokens from a dictionary (secondary_tokens).
 
-    if len(tokens_list) == 1:
-        return tokens_list[0]
+    Reads token index from the file, returns the token,
+    and updates the index file for next calls.
     
-    while True:
-        token = random.choice(tokens_list)
-        if token != last_token:
-            last_token = token
-            return token
+    Args:
+        tokens_dict (dict): Dictionary containing tokens as values
+        
+    Returns:
+        str or None: Next token in sequence, None if dict is empty
+    """
+    token_list = list(tokens_dict.values())
+    length_token_list = len(token_list)
+    
+    if not token_list:
+        print(f"Error: looks {tokens_dict} is empty or invalid!")
+        return None
+    
+    # If there is only one token, just return it
+    elif length_token_list == 1:
+        return token_list[0]
+    
+    # Read current token index from file
+    index = int(read_txt_file(filename="inputs/token_manager_assist")[0])
+    token = token_list[index]
+    # If was equal "last_token" will be zero
+    index = (index + 1) % length_token_list
+    # Update and save index in the file
+    write_in_file(file_path="inputs/token_manager_assist", input_item=index, writing_mode="w")
+    return token
