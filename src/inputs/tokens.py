@@ -58,10 +58,10 @@ def token_manager(tokens_dict):
         return token_list[0]
     
     # Read current token index from file
-    index = int(read_txt_file(filename="inputs/token_manager_assist")[0])
+    index = int(read_txt_file(filename="inputs/token_manager_index_assist")[0])
     token = token_list[index]
     # If was equal "last_token" will be zero
     index = (index + 1) % length_token_list
     # Update and save index in the file
-    write_in_file(file_path="inputs/token_manager_assist", input_item=index, writing_mode="w")
+    write_in_file(file_path="inputs/token_manager_index_assist", input_item=index, writing_mode="w")
     return token
