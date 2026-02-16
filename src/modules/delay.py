@@ -1,21 +1,27 @@
 import time
 import random
+from rich.live import Live
 from rich.console import Console
 console = Console()
 
-def delay(min=1, max=4):
+def delay(message="", min=2, max=6):
     try:
         delay = random.randint(min, max)
-        with console.status(f"Waiting for delay: {delay} secends"):
-            time.sleep(delay)
+        with Live(message, console=console, transient=True):
+            with console.status(f"Waiting for delay: {delay} secends"):
+                time.sleep(delay)
     # Error handeling
-    except (TypeError, ValueError):
-        min = int(min) if str(min).isdigit() else 1
-        max = int(max) if str(max).isdigit() else 4
-        if min < 0: min = 0
-        if max <= min: max = min + 1
-
-        delay(min, max)
+    except (TypeError, ValueError) as error:
+        if not isinstance(min, int):
+            min= 1
+        elif not isinstance(max, int):
+             max = 4
+        elif min < 0:
+            min = 0
+        elif max < min:
+            max = min + 1
+        else:
+            raise error
 # -----------------------
 
 def gap_handler(gap, variance_ratio=0.25):
@@ -27,20 +33,20 @@ def gap_handler(gap, variance_ratio=0.25):
 
 gap = 0
 run_count = 0
-def super_delay(min=10, max=50, gap_og=8):
+def super_delay(message="", min=10, max=50, gap_og=8):
     global run_count, gap
     run_count += 1
     if gap == 0 :
         gap = gap_handler(gap_og, variance_ratio=0.25)
     
     if run_count == gap:
-        delay(min, max)
+        delay(message, min, max)
         gap = gap_handler(gap_og, variance_ratio=0.25)
         run_count = 0
  # ---------------------------
 
-def delay_and_super_delay(min, max, super_min, super_max, super_gap):
-    delay(min, max)
-    super_delay(super_min, super_max, super_gap)
+def delay_and_super_delay(message="", min=5, max=15, super_min=10, super_max=50, super_gap=8):
+    delay(message, min, max)
+    super_delay(message, super_min, super_max, super_gap)
 
 
