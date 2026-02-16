@@ -25,7 +25,7 @@ secondary_tokens = {
     "name3": "token3"
 }
 
-def headeres(token):
+def make_headers(token):
     """
     Generate GitHub API headers using the provided token."""
     return {

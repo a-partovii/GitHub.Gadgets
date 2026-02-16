@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 from modules.delay import delay
 from modules.write_in_file import write_in_file
-from inputs.tokens import secondary_tokens, token_manager, headeres
+from inputs.tokens import secondary_tokens, token_manager, make_headers
 
 def get_followers_list(target_username, output_type):
     """
@@ -22,7 +22,7 @@ def get_followers_list(target_username, output_type):
     while True:
         # per_page = 100, max items per request
         url = f"https://api.github.com/users/{target_username}/followers?per_page=100&page={page}"
-        headers = headeres(token_manager(secondary_tokens))
+        headers = make_headers(token_manager(secondary_tokens))
         response = req.get(url, headers=headers)
 
         if response.status_code != 200:
