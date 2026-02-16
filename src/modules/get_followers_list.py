@@ -5,7 +5,7 @@ from modules.delay import delay
 from modules.write_in_file import write_in_file
 from inputs.tokens import secondary_tokens, token_manager, make_headers
 
-def get_followers_list(target_username, output_type):
+def get_followers_list(target_username, output_type="list"):
     """
     Fetch followers of the specified GitHub user.
 

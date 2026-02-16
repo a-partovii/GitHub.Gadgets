@@ -1,6 +1,6 @@
 import os
-from read_txt_file import read_txt_file
-from write_in_file import write_in_file
+from modules.read_txt_file import read_txt_file
+from modules.write_in_file import write_in_file
 
 def filter_file(file_path:str, filter_items):
     """
