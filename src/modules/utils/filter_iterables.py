@@ -1,6 +1,6 @@
 import os
-from modules.read_txt_file import read_txt_file
-from modules.write_in_file import write_in_file
+from modules.file_modules import read_file
+from modules.file_modules import write_file
 
 def filter_file(file_path:str, filter_items):
     """
@@ -21,12 +21,12 @@ def filter_file(file_path:str, filter_items):
         raise ValueError(f"Invalid <filter_items>: {error}")
     
     # read file and make it a list
-    raw_list = read_txt_file(file_path)
+    raw_list = read_file(file_path)
 
     # filter
     result_list = [i for i in raw_list if i not in remove_set]
 
-    write_in_file(file_path, result_list, writing_mode="w")
+    write_file(file_path, result_list, writing_mode="w")
 
 # -------------------------------------------------------------
 def filter_list(raw_list:list, filter_items, output_mode:str = "list", file_name:str = "filtered_list.txt"):
@@ -57,7 +57,7 @@ def filter_list(raw_list:list, filter_items, output_mode:str = "list", file_name
         raise ValueError('<output_mode> must be "list" or "file"')
     
     elif output_mode == "file":
-        write_in_file(f"outputs/{file_name}", result_list, writing_mode="w")
+        write_file(f"outputs/{file_name}", result_list, writing_mode="w")
 
     return result_list
 
@@ -72,7 +72,7 @@ def deduplicate_file_content(file_path:str):
     if not os.path.exists(file_path):
         raise FileNotFoundError(file_path)
 
-    raw_list = read_txt_file(file_path)
+    raw_list = read_file(file_path)
     seen = set()
     result_list = []
     for i in raw_list:
@@ -80,7 +80,7 @@ def deduplicate_file_content(file_path:str):
             seen.add(i)
             result_list.append(i)
 
-    write_in_file(file_path, result_list, writing_mode="w")
+    write_file(file_path, result_list, writing_mode="w")
 
 # -------------------------------------------------------------
 def deduplicate_list_content(raw_list:list, output_mode="list", file_name="deduplicate_list.txt"):
@@ -106,6 +106,6 @@ def deduplicate_list_content(raw_list:list, output_mode="list", file_name="dedup
         raise ValueError('<output_mode> must be "list" or "file"')
     
     elif output_mode == "file":
-        write_in_file(f"outputs/{file_name}", result_list, writing_mode="w")
+        write_file(f"outputs/{file_name}", result_list, writing_mode="w")
     
     return result_list
