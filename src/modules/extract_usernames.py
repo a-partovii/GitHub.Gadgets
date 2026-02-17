@@ -7,12 +7,16 @@ from inputs.tokens import secondary_tokens, token_manager, make_headers
 
 def extract_usernames(target_username:str, source:str, output_type:str ="list"):
     """
-    Fetch followers of the specified GitHub user.
+    Fetch usernames of a specified GitHub user's followers or followed accounts.
 
     Args:
-        target_username: Username of the account whose followers will be extracted
-        headers: Request headers (available from the token module)
-        output_type: "file" to save output, "list" to return as a list (default = list)
+        target_username (str): Username of the account whose data will be extracted.
+        source (str): "followers" to extract followers, "following" to extract followings of the given username.
+        output_type (str): "list" to return as a list (default = list), "file" to save output file too.
+
+    Returns:
+        list[str] | None: List of usernames,
+        None if there was an error.
     """
     current_date = datetime.now().strftime("%Y-%m-%d_%H;%M") # Get current date and time for the output file naming
     file_path = f"outputs/({target_username}){source} [{current_date}].txt"
