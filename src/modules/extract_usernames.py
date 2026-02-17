@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 from modules.utils import delay
 from modules.file_modules import write_file
-from config.tokens import secondary_tokens, token_manager, make_headers
+from config import secondary_tokens, token_manager, make_headers
 
 def extract_usernames(target_username:str, source:str, output_type:str ="list"):
     """
