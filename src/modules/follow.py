@@ -5,6 +5,11 @@ import requests as req
 
 def follow(usernames: list[str], save_progress: bool = True) -> bool:
     """
+    Follow a list of GitHub usernames using the provided token.
+
+    Args:
+        usernames (list[str]): A list of GitHub usernames to follow.
+        save_progress (bool): Whether to save progress in a file for resuming later.
     """
     total = 0 # Total followed accounts
 
