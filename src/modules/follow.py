@@ -48,7 +48,7 @@ def follow(usernames: list[str], save_progress: bool = True) -> bool:
             save_progress and filter_file(progress_file, username)
 
         # Rate limit reached
-        elif status == 403 or remaining <= "5":
+        elif status == 403 or int(remaining) <= 5:
             message = f'[WARN] Token Rate Limit is Close to Being Reached, Remaining: "{remaining}"\n Take a break and continue later...'
             return False
 
