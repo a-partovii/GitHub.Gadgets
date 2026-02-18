@@ -1,6 +1,6 @@
 import time
 import random
-from modules.utils import random_in_range
+from .random_in_range import random_in_range
 from rich.live import Live
 from rich.console import Console
 console = Console()
