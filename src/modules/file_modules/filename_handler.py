@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-def unique_filename(filename:str) -> str:
+def unique_filename(file_path:str) -> str:
     """
     Returns a unique file path. If the file exists, appends a counter (e.g., outputs/filename(1).txt).
     
@@ -12,14 +12,14 @@ def unique_filename(filename:str) -> str:
         str: A unique file path that doesn't exist in the directory.
     """
     try:
-        name, ext = os.path.splitext(filename)
+        name, ext = os.path.splitext(file_path)
         count = 1
-        while os.path.exists(filename):
-            filename = f"{name}({count}){ext}"
+        while os.path.exists(file_path):
+            file_path = f"{name}({count}){ext}"
             count += 1
     except:
         pass
-    return filename
+    return file_path
 
 # ----------------------------------------------------------
 def filename_date(ext:str =".txt") -> str:
