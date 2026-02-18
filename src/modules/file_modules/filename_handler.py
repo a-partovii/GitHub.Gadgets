@@ -3,19 +3,22 @@ from datetime import datetime
 
 def unique_filename(filename:str) -> str:
     """
-    Returns a unique filename. If the file exists, appends a counter (e.g., filename (1).txt).
+    Returns a unique file path. If the file exists, appends a counter (e.g., outputs/filename(1).txt).
     
     Args:
-        filename (str): Base filename (with extension).
+        file_path (str): Base file path (with slash and extension).
         
     Returns:
-        str: Unique filename that doesn't exist in the directory.
+        str: A unique file path that doesn't exist in the directory.
     """
-    name, ext = os.path.splitext(filename)
-    count = 1
-    while os.path.exists(filename):
-        filename = f"{name} ({count}){ext}"
-        count += 1
+    try:
+        name, ext = os.path.splitext(filename)
+        count = 1
+        while os.path.exists(filename):
+            filename = f"{name}({count}){ext}"
+            count += 1
+    except:
+        pass
     return filename
 
 # ----------------------------------------------------------
