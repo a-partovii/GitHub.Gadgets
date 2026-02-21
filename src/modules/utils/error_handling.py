@@ -38,7 +38,7 @@ def response_error_handler(response):
         return "break", "[ERROR] Invalid or Expired Token."
         
     # Rate limit reached
-    elif status == 403 or (remaining != "unknown" and int(remaining) <= 5):
+    elif status == 429 or status == 403 or (remaining != "unknown" and int(remaining) <= 15):
         return "break", (f'[WARN] Token RateLimit is close to being reached, remaining: "{remaining}"' +
                          "\n take a break and continue later...")
         
@@ -48,9 +48,11 @@ def response_error_handler(response):
        
     # GitHub internal error (server)
     elif status >= 500:
-        return "continue", f"[ERROR] Server Error {status}, retry later."
+        return "break", f"[ERROR] Server Error {status}, retry later."
         
     # other
+    elif status in [400, 408, 409, 412, 413, 414, 415, 416, 417]:
+        return "continue", f"[WARN] HTTP= {status}, reason: {response.reason}" 
+        
     elif status >= 400:
-        return "continue", f"[WARN] HTTP= {status}, reason: {response.reason}"
-         
+        return "break", f"[ERROR] HTTP= {status}, reason: {response.reason}"
