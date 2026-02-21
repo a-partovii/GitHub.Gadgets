@@ -11,8 +11,7 @@ def network_error_handler(error):
             - message (str): A string message describing the network error.
     """
     if error is not None:
-        message = f"[ERROR] Network Error ({type(error).__name__}): {error}"
-        return False, message
+        return False, f"[ERROR] Network Error ({type(error).__name__}): {error}"
     return True, "[OK]"
 
 def response_error_handler(response):
@@ -54,3 +53,4 @@ def response_error_handler(response):
     # other
     elif status >= 400:
         return "continue", f"[WARN] HTTP= {status}, reason: {response.reason}"
+         
