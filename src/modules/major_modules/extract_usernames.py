@@ -1,9 +1,9 @@
 import os
 import requests as req
-from datetime import datetime
 from modules.utils import delay
 from modules.file_modules import write_file
 from config.tokens import secondary_tokens, token_manager, make_headers
+from modules.file_modules import filename_datetime
 
 def extract_usernames(target_username:str, source:str, output_type:str ="list"):
     """
@@ -18,13 +18,14 @@ def extract_usernames(target_username:str, source:str, output_type:str ="list"):
         list[str] | None: List of usernames,
         None if there was an error.
     """
-    current_date = datetime.now().strftime("%Y-%m-%d_%H;%M") # Get current date and time for the output file naming
-    file_path = f"outputs/({target_username}){source} [{current_date}].txt"
+    if output_type == "file":
+        file_path = f"outputs/({target_username}){source} {filename_datetime()}"
 
+    if source not in {"followers", "following"}:
+        raise ValueError('Invalid argument for "extract_usernames", `source` must be `followers` or `following`')
+    
     page = 1
     usernames_list = []
-    if source not in {"followers", "following"}:
-        raise ValueError('Invalid arqument, "source" must be "followers" or following"')
     while True:
         # per_page = 100, max items per request
         url = f"https://api.github.com/users/{target_username}/{source}?per_page=100&page={page}"
