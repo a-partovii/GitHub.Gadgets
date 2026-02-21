@@ -19,9 +19,16 @@ def response_error_handler(response):
     """
     Handles GitHub HTTP response errors only.
     Does nothing for successful responses.
+
+    args:
+        response: The HTTP response object from the GitHub API request.
+
+    returns: tuple (str, str):
+            - action (str):  "break" if a critical issue requires stopping, otherwise "continue".
+            - message (str): A string message describing the error.
     """
     if response is None:
-        return
+        return "break", "[ERROR] No Response Received, check connection or retry later."
 
     # Response handling
     status = response.status_code
@@ -29,21 +36,21 @@ def response_error_handler(response):
 
     # Token error
     if status == 401:
-        return "[ERROR] Invalid or Expired Token."
-
+        return "break", "[ERROR] Invalid or Expired Token."
+        
     # Rate limit reached
     elif status == 403 or (remaining != "unknown" and int(remaining) <= 5):
-        return (f'[WARN] Token RateLimit is Close to Being Reached, Remaining: "{remaining}"' +
-                         "\n Take a break and continue later...")
-
+        return "break", (f'[WARN] Token RateLimit is close to being reached, remaining: "{remaining}"' +
+                         "\n take a break and continue later...")
+        
     # Not found
     elif status == 404:
-       return "[WARN] Resource not found"
-
+       return "continue", "[WARN] Resource Not Found."
+       
     # GitHub internal error (server)
     elif status >= 500:
-        return f"[ERROR] Server error {status}"
-
+        return "continue", f"[ERROR] Server Error {status}, retry later."
+        
     # other
     elif status >= 400:
-        return f"[ERROR] http= {status}, reason: {response.reason}"
+        return "continue", f"[WARN] HTTP= {status}, reason: {response.reason}"
