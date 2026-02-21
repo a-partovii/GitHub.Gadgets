@@ -1,4 +1,4 @@
-from config import primary_token, make_headers
+from config import primary_token, make_headers, token_manager
 from modules.utils import delay_and_super_delay, filter_file
 from modules.file_modules import write_file, delete_file
 from modules.utils import response_error_handler, network_error_handler
@@ -18,7 +18,7 @@ def follow(usernames: list[str], save_progress: bool = True) -> bool:
     progress_file = "outputs/follow_in_progress"
     save_progress and write_file(progress_file, usernames, writing_mode="w")
 
-    headers = make_headers(primary_token)
+    headers = make_headers(token_manager(primary_token))
     for username in usernames:
         url = f"https://api.github.com/user/following/{username}"
         connection = "?"
@@ -27,12 +27,14 @@ def follow(usernames: list[str], save_progress: bool = True) -> bool:
             try:
                 response = req.put(url, headers=headers, timeout=10)
                 connection = True
+                
             # Network errors
             except req.RequestException as error:
                 connection, message = network_error_handler(error)
                 if retries >= 10: # Retries 10 times, then break
                     print(message)
                     return False
+                
                 retries += 1
                 delay_and_super_delay(message, min=7, max=15)
 
