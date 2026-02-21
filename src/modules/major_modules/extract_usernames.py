@@ -30,7 +30,22 @@ def extract_usernames(target_username:str, source:str, output_type:str ="list"):
         # per_page = 100, max items per request
         url = f"https://api.github.com/users/{target_username}/{source}?per_page=100&page={page}"
         headers = make_headers(token_manager(secondary_tokens))
-        response = req.get(url, headers=headers)
+        connection = "?"
+        retries = 1
+        while connection != True:
+            try:
+                response = req.get(url, headers=headers)
+                connection = True
+
+            # Network errors
+            except req.RequestException as error:
+                connection, message = network_error_handler(error)
+                if retries >= 10: # Retries 10 times, then break
+                    print(message)
+                    return False
+                
+                retries += 1
+                delay(message)
 
         if response.status_code != 200:
             print(f"Error: HTTP request failed ({response.status_code}): {response.reason}")
