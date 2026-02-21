@@ -21,14 +21,20 @@ def follow(usernames: list[str], save_progress: bool = True) -> bool:
     headers = make_headers(token_manager(primary_token))
     for username in usernames:
         url = f"https://api.github.com/user/following/{username}"
-        try:
-            response = req.put(url, headers=headers, timeout=10)
-
-        # Network errors
-        except req.RequestException as error:
-            message = network_error_handler(error)
-            delay_and_super_delay(message, min=7, max=15)
-            continue
+        connection = "?"
+        retries = 1
+        while connection != True: # Retry loop for network failures
+            try:
+                response = req.put(url, headers=headers, timeout=10)
+                connection = True
+            # Network errors
+            except req.RequestException as error:
+                connection, message = network_error_handler(error)
+                if retries >= 10: # Retries 10 times, then break
+                    print(message)
+                    return False
+                retries += 1
+                delay_and_super_delay(message, min=7, max=15)
 
         # Response handling
         status = response.status_code
@@ -50,11 +56,14 @@ def follow(usernames: list[str], save_progress: bool = True) -> bool:
             save_progress and filter_file(progress_file, username)
 
         else:
-            message = response_error_handler(response)
-
+            action, message = response_error_handler(response)
+            if action == "break":
+                print(message)
+                return False
+            
         delay_and_super_delay(message, min=7, max=15)
 
-    print(f'[SUCCESS] Follow Process Finished Successfully, total followed Accounts: "{total}"')
+    print(f'[SUCCESS] Follow Process Finished Successfully, total followed accounts: "{total}"')
     # Delete "progress_file" if the loop finished normally
     delete_file(progress_file)
     return True
