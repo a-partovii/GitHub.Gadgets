@@ -6,8 +6,8 @@ def network_error_handler(error):
         error: The exception object from the network error.
         (e.g., error from except req.RequestException as error:)
 
-    returns: (tuplebool, str): 
-            - success (bool): False if there was a network error, otherwise True.
+    returns: tuple (bool, str): 
+            - connection (bool): False if there was a network error, otherwise True.
             - message (str): A string message describing the network error.
     """
     if error is not None:
