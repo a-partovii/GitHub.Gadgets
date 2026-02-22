@@ -1,7 +1,7 @@
 import requests
-from config.tokens import make_headers
+from .tokens import make_headers
 
-def get_github_username(token: str) -> str:
+def get_token_username(token:str) -> str:
     """
     Returns the GitHub username of a given GitHub access token.
 
