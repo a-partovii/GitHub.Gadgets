@@ -4,7 +4,7 @@ from modules.file_modules import write_file, read_file, delete_file
 from .extract_usernames import extract_usernames
 import requests as req
 
-def follow(usernames:list[str], save_progress:bool =True, skip_blacklist:bool =True) -> bool:
+def follow(usernames:list[str], save_progress:bool =True, skip_blacklist:bool =True, skip_followed:bool =True) -> bool:
     """
     Follow a list of GitHub usernames using the provided token.
 
@@ -16,12 +16,13 @@ def follow(usernames:list[str], save_progress:bool =True, skip_blacklist:bool =T
     Returns:
         bool: True if the process completed successfully, False otherwise.
     """
-    if skip_blacklist: 
+    if skip_blacklist: # Filter usernames based on the "blacklist.txt" file
         blacklist = read_file("config/blacklist.txt")
         usernames = filter_list(usernames, blacklist)
-    # Filter accounts already followed 
-    my_username = get_token_username(token_manager(primary_token))
-    usernames = filter_list(usernames, extract_usernames(my_username, "following")) 
+                        
+    if skip_followed: # Filter accounts already followed 
+        my_username = get_token_username(token_manager(primary_token))
+        usernames = filter_list(usernames, extract_usernames(my_username, "following")) 
 
     # Save an initial list, so the process can be resumed if interrupted
     progress_file = "outputs/.follow_in_progress"
