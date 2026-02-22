@@ -1,10 +1,8 @@
 import os
 import requests as req
-from modules.utils import delay
-from modules.file_modules import write_file
-from config.tokens import secondary_tokens, token_manager, make_headers
-from modules.file_modules import filename_datetime
-from modules.utils import network_error_handler, response_error_handler
+from config import secondary_tokens, token_manager, make_headers
+from modules.utils import delay, network_error_handler, response_error_handler
+from modules.file_modules import write_file, filename_datetime
 
 def extract_usernames(target_username:str, source:str, output_type:str ="list"):
     """
