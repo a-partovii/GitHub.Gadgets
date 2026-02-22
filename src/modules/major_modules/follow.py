@@ -1,24 +1,34 @@
-from config import primary_token, make_headers, token_manager
-from modules.utils import delay_and_super_delay, filter_file
-from modules.file_modules import write_file, delete_file
-from modules.utils import response_error_handler, network_error_handler
+from config import primary_token, make_headers, token_manager, get_token_username
+from modules.utils import delay_and_super_delay, filter_file, filter_list, response_error_handler, network_error_handler
+from modules.file_modules import write_file, read_file, delete_file
+from .extract_usernames import extract_usernames
 import requests as req
 
-def follow(usernames: list[str], save_progress: bool = True) -> bool:
+def follow(usernames:list[str], save_progress:bool =True, skip_blacklist:bool =True) -> bool:
     """
     Follow a list of GitHub usernames using the provided token.
 
     Args:
         usernames (list[str]): A list of GitHub usernames to follow.
         save_progress (bool): Whether to save progress in a file for resuming later.
+        skip_blacklist (bool): Whether to skip usernames that are in the blacklist.
+    
+    Returns:
+        bool: True if the process completed successfully, False otherwise.
     """
-    total = 0 # Total followed accounts
+    if skip_blacklist: 
+        blacklist = read_file("config/blacklist.txt")
+        usernames = filter_list(usernames, blacklist)
+    # Filter accounts already followed 
+    my_username = get_token_username(token_manager(primary_token))
+    usernames = filter_list(usernames, extract_usernames(my_username, "following")) 
 
     # Save an initial list, so the process can be resumed if interrupted
     progress_file = "outputs/.follow_in_progress"
     save_progress and write_file(progress_file, usernames, writing_mode="w")
 
     headers = make_headers(token_manager(primary_token))
+    total = 0 # Total followed accounts
     for username in usernames:
         url = f"https://api.github.com/user/following/{username}"
         connection = "?"
