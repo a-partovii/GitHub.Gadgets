@@ -1,6 +1,6 @@
 from config import primary_token, make_headers, token_manager, get_token_username
 from modules.utils import delay_and_super_delay, filter_file, filter_list, response_error_handler, network_error_handler
-from modules.file_modules import write_file, read_file, delete_file
+from modules.file_modules import write_file, read_file, delete_file, check_file_exists
 from .extract_usernames import extract_usernames
 import requests as req
 
@@ -80,3 +80,31 @@ def follow(usernames:list[str], save_progress:bool =True, skip_blacklist:bool =T
     # Delete "progress_file" if the loop finished normally
     delete_file(progress_file)
     return True
+
+def continue_follow_progress() -> bool:
+    """
+    Checks if a [.follow_in_progress] file exists, asks the user
+    to continue the previous follow process.
+
+    Returns:
+        bool: True if the follow process was resumed, False otherwise.
+    """
+    try:
+        if not check_file_exists("outputs/.follow_in_progress"):
+            return False
+
+        user_input = input("A follow progress file was found from your last action.\n"
+                           "Do you want to continue the last process? [Y/n]: ").strip().lower()
+
+        if user_input in {"y", "yes"}:
+            follow(
+                usernames=read_file("outputs/.follow_in_progress"),
+                save_progress=True,
+                skip_blacklist=False,
+                skip_followed=False)
+            return True
+        return False
+
+    except Exception as error:
+        print(f"An error occurred while trying to continue the follow process.\n{error}")
+        return False
