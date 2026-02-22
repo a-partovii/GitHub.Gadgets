@@ -15,7 +15,7 @@ def follow(usernames: list[str], save_progress: bool = True) -> bool:
     total = 0 # Total followed accounts
 
     # Save an initial list, so the process can be resumed if interrupted
-    progress_file = "outputs/follow_in_progress"
+    progress_file = "outputs/.follow_in_progress"
     save_progress and write_file(progress_file, usernames, writing_mode="w")
 
     headers = make_headers(token_manager(primary_token))
