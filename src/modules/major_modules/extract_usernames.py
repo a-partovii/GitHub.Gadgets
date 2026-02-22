@@ -66,7 +66,8 @@ def extract_usernames(target_username:str, source:str, output_type:str ="list"):
                     message += f'to "{file_path}" '
 
                 except Exception as error:
-                    message = f"[ERROR] Writing in the File Failed, check this error and try again: \n{error}\n" + message
+                    message = (f"[ERROR] Writing in the File Failed, " +
+                              f"check this error and try again: \n{error}\n" + message)
 
             message += f'| Token RateLimit Remaining: "{remaining}"'
             page += 1
@@ -84,8 +85,8 @@ def extract_usernames(target_username:str, source:str, output_type:str ="list"):
         delay(message ) # Random delay per request (2–6 seconds)
               
     if output_type == "file":
-        print(f'[SUCCESS] Extracting Usernames is Done, "{len(usernames_list)}" usernames saved to "{file_path}"\n')
+        print(f'[SUCCESS] Extracting Usernames is Done, "{len(usernames_list)}" usernames saved to "{file_path}"')
     else:
-        print(f'[SUCCESS] Extracting Usernames is Done, "{len(usernames_list)}" usernames saved.\n')
+        print(f'[SUCCESS] Extracting Usernames is Done, "{len(usernames_list)}" usernames saved.')
 
     return usernames_list
