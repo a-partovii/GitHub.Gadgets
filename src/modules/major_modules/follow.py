@@ -1,10 +1,14 @@
 from config import primary_token, make_headers, token_manager, get_token_username
-from modules.utils import delay_and_super_delay, filter_file, filter_list, response_error_handler, network_error_handler
+from modules.utils import delay_and_super_delay, filter_file, filter_list, response_error_handler
 from modules.file_modules import write_file, read_file, delete_file, check_file_exists
 from .send_request import send_request
 from .extract_usernames import extract_usernames
 
-def follow(usernames:list[str], save_progress:bool =True, skip_blacklist:bool =True, skip_followed:bool =True) -> bool:
+def follow(
+        usernames:list[str],
+        save_progress:bool =True,
+        skip_followed:bool =True,
+        skip_blacklist:bool =True) -> bool :
     """
     Follow a list of GitHub usernames using the provided token.
 
@@ -16,17 +20,18 @@ def follow(usernames:list[str], save_progress:bool =True, skip_blacklist:bool =T
     Returns:
         bool: True if the process completed successfully, False otherwise.
     """
-    if skip_blacklist: # Filter usernames based on the "blacklist.txt" file
-        blacklist = read_file("config/blacklist.txt")
-        usernames = filter_list(usernames, blacklist)
+
+    # Filter usernames based on the "blacklist.txt" file
+    if skip_blacklist:
+        usernames = filter_list(usernames, read_file("config/blacklist.txt"))
                         
     if skip_followed: # Filter accounts already followed 
         my_username = get_token_username(token_manager(primary_token))
         usernames = filter_list(usernames, extract_usernames(my_username, "following")) 
 
-    # Save an initial list, so the process can be resumed if interrupted
-    progress_file = "outputs/.follow_in_progress"
-    save_progress and write_file(progress_file, usernames, writing_mode="w")
+    if save_progress: # Save an initial file, so the process can be resumed if interrupted
+        progress_file = "outputs/.follow_in_progress"
+        write_file(progress_file, usernames, writing_mode="w")
 
     headers = make_headers(token_manager(primary_token))
     total = 0 # Total followed accounts
