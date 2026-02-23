@@ -27,7 +27,7 @@ def follow(
                         
     if skip_followed: # Filter accounts already followed 
         my_username = get_token_username(token_manager(primary_token))
-        usernames = filter_list(usernames, extract_usernames(my_username, "following")) 
+        usernames = filter_list(usernames, extract_usernames(my_username, "following", show_message=False)) 
 
     if save_progress: # Save an initial file, so the process can be resumed if interrupted
         progress_file = "outputs/.follow_in_progress"
@@ -44,16 +44,15 @@ def follow(
             return False
         
         status = response.status_code
-        remaining = response.headers.get("X-RateLimit-Remaining", "unknown")
+        rl_remaining = response.headers.get("X-RateLimit-Remaining", "unknown")
 
         if status == 204: # Success
             total += 1
-            message = f'[OK] "{username}" Followed | Total Follow: "{total}" | Token RateLimit Remaining: "{remaining}"'
+            message = f'[OK] "{username}" Followed | Total Follow: "{total}" | Token RateLimit Remaining: "{rl_remaining}"'
             # Remove the followed username from the "progress_file"
             save_progress and filter_file(progress_file, username)
 
-        # Already followed (GitHub returns 422)
-        elif status == 422:
+        elif status == 422: # Already followed (GitHub returns 422)
             message = f'[SKIP] Already Followed:"{username}"'
             save_progress and filter_file(progress_file, username)
 
