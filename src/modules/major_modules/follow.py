@@ -1,8 +1,8 @@
 from config import primary_token, make_headers, token_manager, get_token_username
 from modules.utils import delay_and_super_delay, filter_file, filter_list, response_error_handler, network_error_handler
 from modules.file_modules import write_file, read_file, delete_file, check_file_exists
+from .send_request import send_request
 from .extract_usernames import extract_usernames
-import requests as req
 
 def follow(usernames:list[str], save_progress:bool =True, skip_blacklist:bool =True, skip_followed:bool =True) -> bool:
     """
@@ -32,24 +32,12 @@ def follow(usernames:list[str], save_progress:bool =True, skip_blacklist:bool =T
     total = 0 # Total followed accounts
     for username in usernames:
         url = f"https://api.github.com/user/following/{username}"
-        connection = "?"
-        retries = 1
-        while connection != True: # Retry loop for network failures
-            try:
-                response = req.put(url, headers=headers, timeout=10)
-                connection = True
-                
-            # Network errors
-            except req.RequestException as error:
-                connection, message = network_error_handler(error)
-                if retries >= 10: # Retries 10 times, then break
-                    print(message)
-                    return False
-                
-                retries += 1
-                delay_and_super_delay(message, min=7, max=15)
+        response = send_request("put", url, headers)
 
         # Response handling
+        if response is False:
+            return False
+        
         status = response.status_code
         remaining = response.headers.get("X-RateLimit-Remaining", "unknown")
 
