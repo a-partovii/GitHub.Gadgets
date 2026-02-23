@@ -73,6 +73,7 @@ def follow(
     delete_file(progress_file)
     return True
 
+# -----------------------------------------------------------------------------------------------------------
 def continue_follow_progress() -> bool:
     """
     Checks if a [.follow_in_progress] file exists, asks the user
