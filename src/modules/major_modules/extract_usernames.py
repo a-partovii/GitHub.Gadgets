@@ -1,8 +1,9 @@
 import os
 import requests as req
 from config import secondary_tokens, token_manager, make_headers
-from modules.utils import delay, network_error_handler, response_error_handler
+from modules.utils import delay, response_error_handler
 from modules.file_modules import write_file, filename_datetime
+from .send_request import send_request
 
 def extract_usernames(target_username:str, source:str, output_type:str ="list"):
     """
@@ -28,25 +29,16 @@ def extract_usernames(target_username:str, source:str, output_type:str ="list"):
         # per_page = 100, max items per request
         url = f"https://api.github.com/users/{target_username}/{source}?per_page=100&page={page}"
         headers = make_headers(token_manager(secondary_tokens))
-        connection = "?"
-        retries = 1
-        while connection != True:
-            try:
-                response = req.get(url, headers=headers)
-                connection = True
 
-            # Network errors
-            except req.RequestException as error:
-                connection, message = network_error_handler(error)
-                if retries >= 10: # Retries 10 times, then break
-                    print(message)
-                    return False
-                
-                retries += 1
-                delay(message)
+        response = send_request("get", url, headers)
 
+        # Response handling
+        if response is False:
+            return False
+    
         status = response.status_code
         remaining = response.headers.get("X-RateLimit-Remaining", "unknown")
+        
 
         if status == 200:
             data_json = response.json()
