@@ -1,18 +1,16 @@
 def network_error_handler(error):
     """
     Generate a simple message for network/request failure errors.
+    
+    Args:
+        error (Exception): The caught network exception.
 
-    args:
-        error: The exception object from the network error.
-        (e.g., error from except req.RequestException as error:)
-
-    returns: tuple (bool, str): 
-            - connection (bool): False if there was a network error, otherwise True.
-            - message (str): A string message describing the network error.
+    Returns:
+        str: Formatted error message.
     """
     if error is not None:
-        return False, f"[ERROR] Network Error ({type(error).__name__}): {error}"
-    return True, "[OK]"
+        return f"[ERROR] Network Error ({type(error).__name__}): {error}"
+    return "[ERROR] An unknown network error occurred."
 
 def response_error_handler(response):
     """
