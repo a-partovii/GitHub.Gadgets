@@ -1,21 +1,27 @@
 import os
-import requests as req
 from config import secondary_tokens, token_manager, make_headers
 from modules.utils import delay, response_error_handler
 from modules.file_modules import write_file, filename_datetime
 from .send_request import send_request
 
-def extract_usernames(target_username:str, source:str, output_type:str ="list"):
+def extract_usernames(
+        target_username:str,
+        source:str,
+        output_type:str ="list",
+        show_message:bool =True,
+        show_logs:bool =True) -> list[str] | bool :
     """
-    Fetch usernames of a specified GitHub user's followers or followed accounts.
+    Extract GitHub usernames from followers or following of a target user.
 
     Args:
-        target_username (str): Username of the account whose data will be extracted.
-        source (str): "followers" to extract followers, "following" to extract followings of the given username.
-        output_type (str): "list" to return as a list (default = list), "file" to save output file too.
+        target_username (str): GitHub username to extract data from.
+        source (str): "followers" or "following".
+        output_type (str, optional): "list" to return list (defaults="list"), "file" to save output file.
+        show_message (bool, optional): Show final message (defalt=True).
+        show_logs (bool, optional): Show per-request logs (defalt=True).
 
     Returns:
-        list[str] | False: List of usernames, unless there was an critical error
+        list[str] | bool: List of usernames or False on error.
     """
     if output_type == "file":
         file_path = f"outputs/({target_username}){source} {filename_datetime()}"
@@ -72,11 +78,14 @@ def extract_usernames(target_username:str, source:str, output_type:str ="list"):
                 print(message)
                 return False
             
+        if show_logs is not True:
+            message = ""
         delay(message ) # Random delay per request (2–6 seconds)
-              
-    if output_type == "file":
-        print(f'[SUCCESS] Extracting Usernames is Done, "{len(usernames_list)}" usernames saved to "{file_path}"')
-    else:
-        print(f'[SUCCESS] Extracting Usernames is Done, "{len(usernames_list)}" usernames saved.')
+
+    if show_message:          
+        if output_type == "file":
+            print(f'[SUCCESS] Extracting Usernames is Done, "{len(usernames_list)}" usernames saved to "{file_path}"')
+        else:
+            print(f'[SUCCESS] Extracting Usernames is Done, "{len(usernames_list)}" usernames saved.')
 
     return usernames_list
