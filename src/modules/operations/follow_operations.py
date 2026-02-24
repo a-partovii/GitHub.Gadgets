@@ -1,7 +1,8 @@
 from modules.major_modules import follow, extract_usernames
+from modules.file_modules import file_picker, read_file
 from modules.utils import filter_list
 
-def follow_back(my_username):
+def follow_back(my_username:str):
     try:
         my_followers = extract_usernames(my_username, "followers")
         my_following = extract_usernames(my_username, "following")
@@ -10,10 +11,24 @@ def follow_back(my_username):
         follow(usernames)
     except:
         pass
-# -------------------------------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------------------
+def follow_from_file():
+    try:
+        file_path = file_picker()
+        if not file_path:
+            print("Operation cancelled.")
+            return
+
+        usernames = read_file(file_path)
+        follow(usernames)
+    except:
+        pass
+
+# -----------------------------------------------------------------------------------------
 follow_sub_menu = {
     "1": {"label": "Follow back your followers", "action": follow_back},
-    # "2": {"label": "Follow from a list file", "action": follow_from_file},
+    "2": {"label": "Follow from a list file", "action": follow_from_file},
     # "3": {"label": "Follow from a user's followers", "action": follow_followers},
     # "4": {"label": "Follow from a user's following", "action": follow_following},
     # "5": {"label": "Follow who starred your repositories", "action": follow_my_stargazers},
