@@ -41,6 +41,7 @@ def filter_list(raw_list:list, filter_items, output_mode:str = "list", file_name
     returns:
         The filtered list.
     """
+    file_name = unique_filename(f"outputs/{file_name}")
     try:
         if isinstance(filter_items, list):
             remove_set = {str(i).strip() for i in filter_items}
@@ -52,10 +53,7 @@ def filter_list(raw_list:list, filter_items, output_mode:str = "list", file_name
     # filter
     result_list = [i for i in raw_list if i not in remove_set]
 
-    if output_mode not in ("list", "file"):
-        raise ValueError('<output_mode> must be "list" or "file"')
-    
-    elif output_mode == "file":
+    if output_mode == "file":
         write_file(f"outputs/{file_name}", result_list, writing_mode="w")
 
     return result_list
@@ -101,7 +99,7 @@ def deduplicate_list_content(raw_list:list, output_mode="list", file_name="dedup
         if i not in seen:
             seen.add(i)
             result_list.append(i)
-            
+
     if output_mode == "file":
         write_file(f"outputs/{file_name}", result_list, writing_mode="w")
     
