@@ -26,16 +26,18 @@ def follow_from_file():
         pass
 
 # -----------------------------------------------------------------------------------------
-def follow_from_followers(target_username:str):
+def follow_from_followers():
     try:
-        usernames = extract_usernames(target_username, "folloers", show_message=False)
+        target_username = input("Enter a username to follow their followers: ")
+        usernames = extract_usernames(target_username, "followers", show_message=False)
         follow(usernames)
     except:
         pass
 
 # -----------------------------------------------------------------------------------------
-def follow_from_following(target_username:str):
+def follow_from_following():
     try:
+        target_username = input("Enter a username to follow their following: ")
         usernames = extract_usernames(target_username, "following", show_message=False)
         follow(usernames)
     except:
