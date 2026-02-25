@@ -1,6 +1,5 @@
 import os
-from modules.file_modules import read_file
-from modules.file_modules import write_file
+from modules.file_modules import read_file, write_file, unique_filename
 
 def filter_file(file_path:str, filter_items):
     """
@@ -83,7 +82,7 @@ def deduplicate_file_content(file_path:str):
     write_file(file_path, result_list, writing_mode="w")
 
 # -------------------------------------------------------------
-def deduplicate_list_content(raw_list:list, output_mode="list", file_name="deduplicate_list.txt"):
+def deduplicate_list_content(raw_list:list, output_mode="list", file_name="deduplicated_list.txt"):
     """
     Remove duplicated items from a given list.
 
@@ -95,17 +94,15 @@ def deduplicate_list_content(raw_list:list, output_mode="list", file_name="dedup
     returns: 
         The deduplicated list.
     """
+    file_name = unique_filename(f"outputs/{file_name}")
     seen = set()
     result_list = []
     for i in raw_list:
         if i not in seen:
             seen.add(i)
             result_list.append(i)
-
-    if output_mode not in ("list", "file"):
-        raise ValueError('<output_mode> must be "list" or "file"')
-    
-    elif output_mode == "file":
+            
+    if output_mode == "file":
         write_file(f"outputs/{file_name}", result_list, writing_mode="w")
     
     return result_list
