@@ -1,7 +1,7 @@
 from modules.major_modules import follow, extract_usernames
 from modules.file_modules import file_picker, read_file
 from modules.utils import filter_list, deduplicate_list_content
-
+import random
 def follow_back(my_username:str):
     try:
         my_followers = extract_usernames(my_username, "followers")
@@ -62,8 +62,11 @@ def follow_bulk(my_username:str):
             print("Please just enter a valid number and push the <Enter>")
     try: 
         # Extract first list of usernames (hard coded source)
+        target_username = random.choice(["a-partovii", "torvalds", "gaearon", "yyx990803", "karpathy",
+                                         "bradtraversy", "sindresorhus", "trekhleb", "antirez", "google",
+                                         "github", "OpenAI", "aws", "kde", "oracle", "python", "nodejs", "milvus-io"])
         usernames = extract_usernames(
-                                target_username="a-partovii",
+                                target_username,
                                 source="followers",
                                 limit_count=limit_count,
                                 show_message=False)
