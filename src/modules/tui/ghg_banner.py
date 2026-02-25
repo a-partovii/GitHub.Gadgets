@@ -1,15 +1,13 @@
-
 print(
 """
-------------------------------------------------------------------------------------------------------------
-|              dddddddddddd                                                                                 |
-|         dddddddddddddddddddddb                           /$$$$$$  /$$   /$$  /$$$$$$                      |
-|      dddd                    dddd                       /$$__  $$| $$  | $$ /$$__  $$                     |
-|   dddd    dddd   ____   dddd    dddb                   | $$  \__/| $$  | $$| $$  \__/                     |
-|  dddd    dddddddddddddddddddb    dddd                  | $$ /$$$$| $$$$$$$$| $$ /$$$$                     |
-|  ddd    dddddddddddddddddddddb    ddd                  | $$|_  $$| $$__  $$| $$|_  $$                     |
-| ddb     dddddddddddddddddddddd     ddd                 | $$  \ $$| $$  | $$| $$  \ $$                     |
-| ddd     dddddddddddddddddddddd     ddd                 |  $$$$$$/| $$  | $$|  $$$$$$/                     |
+-------------------------------------------------------------------------------------------------------------
+|              dddddddddddd                                /$$$$$$  /$$   /$$  /$$$$$$                      |
+|         dddddddddddddddddddddb                          /$$__  $$| $$  | $$ /$$__  $$                     |
+|      dddd                    dddd                      | $$  \__/| $$  | $$| $$  \__/                     |
+|   dddd    dddd   ____   dddd    dddb                   | $$ /$$$$| $$$$$$$$| $$ /$$$$                     |
+|  dddd    dddddddddddddddddddb    dddd                  | $$|_  $$| $$__  $$| $$|_  $$                     |
+|  ddd    dddddddddddddddddddddb    ddd                  | $$  \ $$| $$  | $$| $$  \ $$                     |
+| ddb     dddddddddddddddddddddd     ddd                 |  $$$$$$/| $$  | $$|  $$$$$$/                     |
 | bdd      dddddddddddddddddddb      ddd                  \______/ |__/  |__/ \______/                      |
 |  ddd       bddddddddddddddb       ddd  ____ _ _   _   _       _      ____           _            _        |
 |  dddb  \dd\   pddddddddb        dddd  / ___(_) |_| | | |_   _| |__  / ___| __ _  __| | __ _  ___| |_ ___  |
