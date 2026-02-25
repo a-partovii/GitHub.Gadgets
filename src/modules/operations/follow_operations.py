@@ -53,7 +53,7 @@ def follow_repo_stargazers():
 
 # -----------------------------------------------------------------------------------------
 def follow_bulk(my_username:str):
-    while True:
+    while True: # Loop until a valid positive integer for the `limit_count`
         try:
             limit_count = int(input("Enter a number for the bulk follow limit count: "))
             if limit_count >= 1:
@@ -61,23 +61,25 @@ def follow_bulk(my_username:str):
         except:
             print("Please just enter a valid number and push the <Enter>")
     try: 
+        # Extract first list of usernames (hard coded source)
         usernames = extract_usernames(
-                                "a-partovii",
-                                "followers",
+                                target_username="a-partovii",
+                                source="followers",
                                 limit_count=limit_count,
                                 show_message=False)
         
         my_following = set(extract_usernames(my_username, "following", show_message=False) or [])
         blacklist = set(read_file("config/blacklist.txt") or [])
 
-        while True: 
+        while True: # Loop to ensure we have at least `limit_count` usernames after filtering
             usernames = deduplicate_list_content(usernames)
-            spare_list = usernames.copy()
+            spare_list = usernames.copy() # Save as a fallback source
             usernames = filter_list(usernames, my_following)
             usernames = filter_list(usernames, blacklist)
-            
+
+            # If after filtering we still have fewer than the desired count,
+            #  try to fetch more from new in-loop sources
             if len(usernames) < limit_count:
-                print("make spare")
                 for target_username in spare_list[:]:
                     temp_list = extract_usernames(
                             target_username= target_username,
@@ -88,6 +90,7 @@ def follow_bulk(my_username:str):
                     usernames.extend(temp_list)
                     spare_list.remove(target_username)
 
+                    # Checking False is for the extracting module force break
                     if len(usernames) >= limit_count or temp_list is False:
                         break
             else:
@@ -96,7 +99,7 @@ def follow_bulk(my_username:str):
     except Exception as error:
         print(f"[ERROR] {error}")
         return False
-
+    
     follow(
         usernames,
         skip_followed=False,
