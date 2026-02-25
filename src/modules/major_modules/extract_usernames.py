@@ -8,6 +8,7 @@ def extract_usernames(
         target_username:str,
         source:str,
         output_type:str ="list",
+        limit_count:int|None =None,
         show_message:bool =True,
         show_logs:bool =True) -> list[str] | bool :
     """
@@ -31,6 +32,7 @@ def extract_usernames(
     
     page = 1
     usernames_list = []
+    total = 0 # total extracred usernames
     while True:
         # per_page = 100, max items per request
         url = f"https://api.github.com/users/{target_username}/{source}?per_page=100&page={page}"
@@ -45,7 +47,6 @@ def extract_usernames(
         status = response.status_code
         remaining = response.headers.get("X-RateLimit-Remaining", "unknown")
         
-
         if status == 200:
             data_json = response.json()
             if not data_json:
@@ -53,7 +54,8 @@ def extract_usernames(
 
             for user in data_json:
                 usernames_list.append(user.get("login"))
-            message = f'[OK] "{len(usernames_list)}" Usernames Saved '
+            total = len(usernames_list)
+            message = f'[OK] "{total}" Usernames Saved '
 
             if output_type == "file": # "file" or "list" (default=List)
                 try:
@@ -82,10 +84,15 @@ def extract_usernames(
             message = ""
         delay(message ) # Random delay per request (2–6 seconds)
 
+        if limit_count is not None and total >= limit_count: 
+            break
+
     if show_message:          
         if output_type == "file":
             print(f'[SUCCESS] Extracting Usernames is Done, "{len(usernames_list)}" usernames saved to "{file_path}"')
         else:
             print(f'[SUCCESS] Extracting Usernames is Done, "{len(usernames_list)}" usernames saved.')
 
+    if limit_count is not None:
+        return usernames_list[:limit_count]
     return usernames_list
