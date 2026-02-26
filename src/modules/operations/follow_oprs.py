@@ -15,15 +15,17 @@ def follow_back(my_username:str):
 # -----------------------------------------------------------------------------------------
 def follow_from_file():
     try:
+        print("If you can't see the file, check behind this window.")
         file_path = file_picker()
         if not file_path:
             print("Operation cancelled.")
             return
-
+        
         usernames = read_file(file_path)
         follow(usernames)
-    except:
-        pass
+
+    except Exception as error:
+        print(f"[ERROR] {error}")
 
 # -----------------------------------------------------------------------------------------
 def follow_from_followers():
@@ -71,13 +73,13 @@ def follow_bulk(my_username:str):
         skip_blacklist=False)
 # -----------------------------------------------------------------------------------------
 follow_submenu = {
-    "1.": {"label": "Follow back your followers", "action": follow_back},
-    "2.": {"label": "Follow from a list file", "action": follow_from_file},
-    "3.": {"label": "Follow from a user's followers", "action": follow_from_followers},
-    "4.": {"label": "Follow from a user's following", "action": follow_from_following},
-    "5.": {"label": "Follow who starred your repositories", "action": follow_my_stargazers},
-    "6.": {"label": "Follow who starred a given user's repositories", "action": follow_user_stargazers},
-    "7.": {"label": "Follow who starred a given repository", "action": follow_repo_stargazers},
-    "8.": {"label": "Bulk follow with a limit count", "action": follow_bulk},
+    "1": {"label": "Follow back your followers", "action": follow_back},
+    "2": {"label": "Follow from a list file", "action": follow_from_file},
+    "3": {"label": "Follow from a user's followers", "action": follow_from_followers},
+    "4": {"label": "Follow from a user's following", "action": follow_from_following},
+    "5": {"label": "Follow who starred your repositories", "action": follow_my_stargazers},
+    "6": {"label": "Follow who starred a given user's repositories", "action": follow_user_stargazers},
+    "7": {"label": "Follow who starred a given repository", "action": follow_repo_stargazers},
+    "8": {"label": "Bulk follow with a limit count", "action": follow_bulk},
     # "0": {"label": "Back to main menu", "action": return_to_main},
 }
