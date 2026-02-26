@@ -1,4 +1,4 @@
-from .follow_operations import *
+from .follow_oprs import *
 
 __all__ = ["follow_back",
            "follow_from_file",
