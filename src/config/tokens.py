@@ -25,6 +25,38 @@ secondary_tokens = {
 
 from modules.file_modules import read_file
 from modules.file_modules import write_file
+from .get_token_username import get_token_username
+
+# ----------------------------------------------------------------------------
+# Temporary method — improvements coming in next updates
+def set_token_username(tokens_dict: dict):
+    """
+    Update a dictionary of tokens with their corresponding GitHub usernames.
+
+    Args:
+        tokens_dict (dict): Dictionary in format {username_placeholder: token}
+    
+    Returns:
+        None, updates 'tokens_dict' in place.
+    """
+    for key, token in list(tokens_dict.items()):
+        try:
+            username = get_token_username(token)  # extract username from token
+            print(username)
+            tokens_dict[username] = tokens_dict.pop(key)
+        except Exception as error:
+            print(f"[ERROR] Failed to set username for token '{key}': {error}")
+
+set_token_username(primary_token)
+
+# ----------------------------------------------------------------------------
+def make_headers(token):
+    return {
+    "Authorization": f"Bearer {token}",
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28"
+}
+# ----------------------------------------------------------------------------
 
 def token_manager(tokens_dict):
     """
@@ -56,10 +88,10 @@ def token_manager(tokens_dict):
         return token_list[0]
     
     # Read current token index from file
-    index = int(read_file(file_path="inputs/.token_manager_index_assist")[0])
+    index = int(read_file(file_path="config/.token_manager_index_assist")[0])
     token = token_list[index]
     # If was equal "last_token" will be zero
     index = (index + 1) % length_token_list
     # Update and save index in the file
-    write_file(file_path="inputs/.token_manager_index_assist", input_item=index, writing_mode="w")
+    write_file(file_path="config/.token_manager_index_assist", input_item=index, writing_mode="w")
     return token
