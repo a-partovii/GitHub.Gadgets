@@ -1,14 +1,14 @@
 from modules.file_modules import read_file
 from modules.utils import filter_list, deduplicate_list_content
+from config.tokens import primary_token
 from .extract_usernames import extract_usernames
 import random
 
-def extract_bulk_usernames(my_username:str, limit_count:int) -> list:
+def extract_bulk_usernames(limit_count:int) -> list:
     """
     Extract a filtered bulk list of usernames based on followers of random seed users.
 
     Args:
-        my_username (str): Your GitHub username.
         limit_count (int): Minimum number of usernames to collect.
 
     Returns:
@@ -25,6 +25,7 @@ def extract_bulk_usernames(my_username:str, limit_count:int) -> list:
                                 limit_count=limit_count,
                                 show_message=False)
         
+        my_username = next(iter(primary_token))
         my_following = set(extract_usernames(my_username, "following", show_message=False) or [])
         blacklist = set(read_file("config/blacklist.txt") or [])
 
