@@ -1,4 +1,4 @@
-from config import primary_token, make_headers, token_manager, get_token_username
+from config import primary_token, make_headers, token_manager
 from modules.utils import delay_and_super_delay, filter_file, filter_list, response_error_handler
 from modules.file_modules import write_file, read_file, delete_file, check_file_exists
 from .send_request import send_request
@@ -26,7 +26,7 @@ def follow(
         usernames = filter_list(usernames, read_file("config/blacklist.txt"))
                         
     if skip_followed: # Filter accounts already followed 
-        my_username = get_token_username(token_manager(primary_token))
+        my_username = next(iter(primary_token))
         usernames = filter_list(usernames, extract_usernames(my_username, "following", show_message=False)) 
 
     if save_progress: # Save an initial file, so the process can be resumed if interrupted
@@ -73,7 +73,7 @@ def follow(
     delete_file(progress_file)
     return True
 
-# -----------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 def continue_follow_progress() -> bool:
     """
     Checks if a [.follow_in_progress] file exists, asks the user
