@@ -1,9 +1,11 @@
 from modules.major_modules import follow, extract_usernames, extract_bulk_usernames
 from modules.file_modules import file_picker, read_file
 from modules.utils import filter_list
+from config.tokens import primary_token
 
-def follow_back(my_username:str):
+def follow_back():
     try:
+        my_username = next(iter(primary_token))
         my_followers = extract_usernames(my_username, "followers")
         my_following = extract_usernames(my_username, "following")
 
@@ -58,7 +60,7 @@ def follow_user_stargazers():
     print("coming soon...")
 
 # -----------------------------------------------------------------------------------------
-def follow_bulk(my_username:str):
+def follow_bulk():
     while True: # Loop until a valid positive integer for the `limit_count`
         try:
             limit_count = int(input("Enter a number for the bulk follow limit count: "))
@@ -66,9 +68,9 @@ def follow_bulk(my_username:str):
                 break
         except:
             print("Please just enter a valid number and push the <Enter>")
-
+    
     follow(
-        usernames=extract_bulk_usernames(my_username, limit_count),
+        usernames=extract_bulk_usernames(limit_count),
         skip_followed=False,
         skip_blacklist=False)
 # -----------------------------------------------------------------------------------------
