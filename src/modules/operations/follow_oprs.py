@@ -52,6 +52,10 @@ def follow_repo_stargazers():
     print("coming soon...")
 
 # -----------------------------------------------------------------------------------------
+def follow_user_stargazers():
+    print("coming soon...")
+
+# -----------------------------------------------------------------------------------------
 def follow_bulk(my_username:str):
     while True: # Loop until a valid positive integer for the `limit_count`
         try:
@@ -114,7 +118,8 @@ follow_submenu = {
     "3.": {"label": "Follow from a user's followers", "action": follow_from_followers},
     "4.": {"label": "Follow from a user's following", "action": follow_from_following},
     "5.": {"label": "Follow who starred your repositories", "action": follow_my_stargazers},
-    "6.": {"label": "Follow who starred a given repository", "action": follow_repo_stargazers},
-    "7.": {"label": "Bulk follow with a limit count", "action": follow_bulk},
+    "6.": {"label": "Follow who starred a given user's repositories", "action": follow_user_stargazers},
+    "7.": {"label": "Follow who starred a given repository", "action": follow_repo_stargazers},
+    "8.": {"label": "Bulk follow with a limit count", "action": follow_bulk},
     # "0": {"label": "Back to main menu", "action": return_to_main},
 }
