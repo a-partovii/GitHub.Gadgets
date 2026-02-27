@@ -1,4 +1,4 @@
-from config import primary_token, make_headers, token_manager, get_token_username
+from config import primary_token, make_headers, token_manager
 from modules.utils import delay_and_super_delay, filter_file, filter_list, response_error_handler
 from modules.file_modules import write_file, read_file, delete_file, check_file_exists
 from .send_request import send_request
@@ -25,13 +25,10 @@ def unfollow(
     if skip_whitelist:
         usernames = filter_list(usernames, read_file("config/whitelist.txt"))
 
-    
     if skip_non_followed: # Skip accounts not currently followed
-        my_username = get_token_username(token_manager(primary_token))
+        my_username = next(iter(primary_token))
         usernames = filter_list(usernames, extract_usernames(my_username, "followers", show_message=False)) 
 
-
-    
     if save_progress: # Save an initial file, so the process can be resumed if interrupted
         progress_file = "outputs/.unfollow_in_progress"
         write_file(progress_file, usernames, writing_mode="w")
@@ -65,7 +62,7 @@ def unfollow(
                 print(message)
                 return False
 
-        delay_and_super_delay(message, min=7, max=15)
+        delay_and_super_delay(message, min=10, max=30)
 
     print(f'[SUCCESS] Unfollow Process Finished, total unfollowed accounts : "{total}"')
     delete_file(progress_file)
