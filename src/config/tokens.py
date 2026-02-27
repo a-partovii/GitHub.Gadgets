@@ -22,14 +22,41 @@ secondary_tokens = {
     "name2": "token2",
     "name3": "token3"
 }
+# ----------------------------------------------------------------------------
+from modules.file_modules import read_file, write_file
+from modules.major_modules.send_request import send_request
 
-from modules.file_modules import read_file
-from modules.file_modules import write_file
-from .get_token_username import get_token_username
-
+def make_headers(token):
+    return {
+    "Authorization": f"Bearer {token}",
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28"
+}
 # ----------------------------------------------------------------------------
 # Temporary method — improvements coming in next updates
-def set_token_username(tokens_dict: dict):
+def get_token_username(token:str) -> str:
+    """
+    Returns the GitHub username of a given GitHub access token.
+
+    Args:
+        token (str): A GitHub Personal Access Token (PAT) or OAuth token.
+
+    Returns:
+        str: The login (username) of the token owner.
+    """
+    headers = make_headers(token)
+    url = "https://api.github.com/user"
+    try:
+        response = send_request("get", url, headers)
+        response.raise_for_status()
+
+        user_data = response.json()
+        return user_data["login"]
+
+    except Exception as error:
+        print(f"[ERROR] Failed to fetch the token username: {error}")
+
+def set_token_username(tokens_dict:dict):
     """
     Update a dictionary of tokens with their corresponding GitHub usernames.
 
@@ -42,20 +69,12 @@ def set_token_username(tokens_dict: dict):
     for key, token in list(tokens_dict.items()):
         try:
             username = get_token_username(token)  # extract username from token
-            print(username)
             tokens_dict[username] = tokens_dict.pop(key)
         except Exception as error:
             print(f"[ERROR] Failed to set username for token '{key}': {error}")
 
 set_token_username(primary_token)
 
-# ----------------------------------------------------------------------------
-def make_headers(token):
-    return {
-    "Authorization": f"Bearer {token}",
-    "Accept": "application/vnd.github+json",
-    "X-GitHub-Api-Version": "2022-11-28"
-}
 # ----------------------------------------------------------------------------
 
 def token_manager(tokens_dict):
