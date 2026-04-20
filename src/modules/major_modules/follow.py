@@ -30,7 +30,7 @@ def follow(
         usernames = filter_list(usernames, extract_usernames(my_username, "following", show_message=False)) 
 
     if save_progress: # Save an initial file, so the process can be resumed if interrupted
-        progress_file = "outputs/.follow_in_progress"
+        progress_file = "outputs/.follow_in_progress.ghg"
         write_file(progress_file, usernames, writing_mode="w")
 
     headers = make_headers(token_manager(primary_token))
@@ -66,7 +66,7 @@ def follow(
                 print(message)
                 return False
             
-        delay_and_super_delay(message, min=7, max=15)
+        delay_and_super_delay(message, min=10, max=35, super_gap=7)
 
     print(f'[SUCCESS] Follow Process Finished Successfully, total followed accounts: "{total}"')
     # Delete "progress_file" if the loop finished normally
@@ -83,7 +83,7 @@ def continue_follow_progress() -> bool:
         bool: True if the follow process was resumed, False otherwise.
     """
     try:
-        if not check_file_exists("outputs/.follow_in_progress"):
+        if not check_file_exists("outputs/.follow_in_progress.ghg"):
             return False
 
         user_input = input("A follow progress file was found from your last action.\n"
@@ -91,7 +91,7 @@ def continue_follow_progress() -> bool:
 
         if user_input in {"y", "yes"}:
             follow(
-                usernames=read_file("outputs/.follow_in_progress"),
+                usernames=read_file("outputs/.follow_in_progress.ghg"),
                 save_progress=True,
                 skip_blacklist=False,
                 skip_followed=False)

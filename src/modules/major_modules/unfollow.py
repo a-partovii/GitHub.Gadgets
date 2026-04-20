@@ -30,7 +30,7 @@ def unfollow(
         usernames = filter_list(usernames, extract_usernames(my_username, "followers", show_message=False)) 
 
     if save_progress: # Save an initial file, so the process can be resumed if interrupted
-        progress_file = "outputs/.unfollow_in_progress"
+        progress_file = "outputs/.unfollow_in_progress.ghg"
         write_file(progress_file, usernames, writing_mode="w")
 
     headers = make_headers(token_manager(primary_token))
@@ -78,7 +78,7 @@ def continue_unfollow_progress() -> bool:
         bool: True if the unfollow process was resumed, False otherwise.
     """
     try:
-        if not check_file_exists("outputs/.unfollow_in_progress"):
+        if not check_file_exists("outputs/.unfollow_in_progress.ghg"):
             return False
 
         user_input = input("A unfollow progress file was found from your last action.\n"
