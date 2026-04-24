@@ -48,6 +48,18 @@ def unfollow_from_following():
         pass
 
 # -----------------------------------------------------------------------------------------
+def unfollow_repo_stargazers():
+    print("coming soon...")
+
+# -----------------------------------------------------------------------------------------
+def unfollow_user_stargazers():
+    print("coming soon...")
+
+# -----------------------------------------------------------------------------------------
+def unfollow_my_stargazers():
+    print("coming soon...")
+
+# -----------------------------------------------------------------------------------------
 unfollow_submenu = {
     "1": {"label": "Unfollow users who don't follow you back", "action": unfollow_non_followers},
     "2": {"label": "Unfollow from a list file", "action": unfollow_from_file},
