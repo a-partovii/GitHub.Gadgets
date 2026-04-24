@@ -4,7 +4,7 @@ from config.tokens import primary_token
 from .extract_usernames import extract_usernames
 import random
 
-def extract_bulk_usernames(limit_count:int) -> list:
+def extract_bulk_usernames_to_follow(limit_count:int) -> list:
     """
     Extract a filtered bulk list of usernames based on followers of random seed users.
 

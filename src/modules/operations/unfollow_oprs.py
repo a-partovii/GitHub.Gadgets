@@ -1,4 +1,4 @@
-from modules.major_modules import unfollow, extract_usernames, extract_bulk_usernames
+from modules.major_modules import unfollow, extract_usernames, extract_bulk_usernames_to_follow
 from modules.file_modules import file_picker, read_file
 from modules.utils import filter_list
 from config.tokens import primary_token
