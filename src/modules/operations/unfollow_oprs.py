@@ -30,6 +30,15 @@ def unfollow_from_file():
         print(f"[ERROR] {error}")
 
 # -----------------------------------------------------------------------------------------
+def unfollow_from_followers():
+    try:
+        target_username = input("Enter a username to unfollow their followers: ")
+        usernames = extract_usernames(target_username, "followers", show_message=False)
+        unfollow(usernames)
+    except:
+        pass
+
+# -----------------------------------------------------------------------------------------
 unfollow_submenu = {
     "1": {"label": "Unfollow users who don't follow you back", "action": unfollow_non_followers},
     "2": {"label": "Unfollow from a list file", "action": unfollow_from_file},
