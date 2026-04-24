@@ -17,7 +17,7 @@ def follow_back():
 # -----------------------------------------------------------------------------------------
 def follow_from_file():
     try:
-        print("If you can't see the file, check behind this window.")
+        print("If you can't see the file picker window, check behind this window.")
         file_path = file_picker()
         if not file_path:
             print("Operation cancelled.")
