@@ -22,7 +22,8 @@ def extract_usernames(
         show_logs (bool, optional): Show per-request logs (defalt=True).
 
     Returns:
-        list[str] | bool: List of usernames or False on error.
+        list[str] | str | bool: List of usernames or `file_path` on output_type="file" 
+        or False on error.
     """
     if output_type == "file":
         file_path = f"outputs/({target_username}){source} {filename_datetime()}"
@@ -92,7 +93,10 @@ def extract_usernames(
             print(f'[SUCCESS] Extracting Usernames is Done, "{len(usernames_list)}" usernames saved to "{file_path}"')
         else:
             print(f'[SUCCESS] Extracting Usernames is Done, "{len(usernames_list)}" usernames saved.')
-
-    if limit_count is not None:
+    if output_type == "file":
+        return file_path
+    
+    elif limit_count is not None:
         return usernames_list[:limit_count]
+    
     return usernames_list
