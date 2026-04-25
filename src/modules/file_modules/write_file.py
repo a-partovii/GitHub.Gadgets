@@ -1,3 +1,5 @@
+import os
+
 def write_file(file_path:str, input_item, writing_mode:str = "a", separator:str = "\n"):
     """
     Write one or multiple items into a text file.
@@ -13,6 +15,7 @@ def write_file(file_path:str, input_item, writing_mode:str = "a", separator:str 
         raise ValueError("writing_mode must be 'a', 'w', or 'x'")
     
     try:
+        os.makedirs("outputs", exist_ok=True) # Create outputs folder if it doesn't exist
         with open(file_path, writing_mode, encoding="utf-8") as file:
             if isinstance(input_item, list):
                 for item in input_item:
