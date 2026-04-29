@@ -1,12 +1,13 @@
 from modules.tui import show_menu
 from modules.operations import (
                             follow_submenu,
-                            unfollow_submenu)
+                            unfollow_submenu,
+                            extract_oprs)
                             
 main_menu = {
     "1": {"label": "Follow", "action": lambda: show_menu(follow_submenu)},
     "2": {"label": "Unfollow", "action": lambda:show_menu(unfollow_submenu)},
-    # "3": {"label": "Extract usernames", "action": ""},
+    "3": {"label": "Extract usernames", "action": lambda:show_menu(extract_oprs)},
     # "4": {"label": "Adjust Blacklist", "action": ""},
     # "5": {"label": "Adjust Whitelist", "action": ""},
     # "6": {"label": "Adjust GitHub tokens", "action": ""},

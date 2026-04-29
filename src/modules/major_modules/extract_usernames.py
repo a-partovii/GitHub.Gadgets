@@ -1,4 +1,3 @@
-import os
 from config import secondary_tokens, token_manager, make_headers
 from modules.utils import delay, response_error_handler
 from modules.file_modules import write_file, filename_datetime
@@ -60,7 +59,6 @@ def extract_usernames(
 
             if output_type == "file": # "file" or "list" (default=List)
                 try:
-                    os.makedirs("outputs", exist_ok=True) # Create outputs folder if it doesn't exist
                     write_file(file_path=file_path, input_item=usernames_list, writing_mode="w")
                     message += f'to "{file_path}" '
 
