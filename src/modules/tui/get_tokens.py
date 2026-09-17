@@ -2,8 +2,9 @@ from modules.file_modules import write_json
 from config.tokens import get_token_username
 
 def get_primary_token():
-    """Get, validate, and save the primary GitHub token."""
-
+    """
+    Get, validate, and save the primary GitHub token.
+    """
     while True:
         token = input("Enter GitHub token: ").strip()
 
@@ -15,21 +16,16 @@ def get_primary_token():
 
         if username is None:
             print("[ERROR] Invalid GitHub token.")
-            print("[INFO] Please check the token and try again.\n")
+            print("[HINT] Please check the token and try again.\n")
             continue
 
-        primary_token = {
-            username: token
-        }
+        primary_token = {username: token}
 
-        save_tokens_json(
-            "config/primary_token.json",
-            primary_token
-        )
+        save_tokens_json("config/primary_token.json", primary_token)
 
         print(f"[SUCCESS] Primary token added for '{username}'.")
-        return primary_token
-
+        return
+    
 def get_secondary_tokens():
     """
     Get and validate multiple secondary GitHub tokens.
@@ -40,7 +36,8 @@ def get_secondary_tokens():
     secondary_tokens = {}
 
     print("\nEnter secondary GitHub tokens.")
-    print("Press Enter without entering a token to finish.\n")
+    print("[INFO] Using secondary tokens is recommended, but not necessary.\n"
+          "[HINT] Press Enter without entering a token to finish.\n")
 
     while True:
         token = input("Enter secondary GitHub token: ").strip()
@@ -49,45 +46,38 @@ def get_secondary_tokens():
             break
 
         if token in secondary_tokens.values():
-            print("[WARNING] This token has already been added.")
+            print("[WARN] This token has already been added.")
             continue
 
         username = get_token_username(token)
 
         if username is None:
             print("[ERROR] Invalid GitHub token.")
-            print("[INFO] Please check the token and try again.\n")
+            print("[HINT] Please check the token and try again.\n")
             continue
 
         if username in secondary_tokens:
-            print(
-                f"[WARNING] A token for '{username}' "
-                "has already been added."
-            )
+            print(f"[WARN] A token for '{username}' has already been added.")
             continue
 
         secondary_tokens[username] = token
-
-        print(
-            f"[SUCCESS] Token for '{username}' added successfully.\n"
-        )
+        print(f"[SUCCESS] Token for '{username}' received successfully.\n")
 
     if not secondary_tokens:
         print("[INFO] No secondary tokens were added.")
         return
 
-    save_tokens_json(
-        "config/secondary_tokens.json",
-        secondary_tokens
-    )
+    save_tokens_json("config/secondary_tokens.json", secondary_tokens)
+    return
 
 def save_tokens_json(file_path:str, data:dict):
-    """Save token data to a JSON file."""
+    """
+    Save token data to a JSON file.
+    """
 
     try:
         write_json(file_path, data)
-        print(f"[SUCCESS] Tokens saved successfully to '{file_path}'.")
+        return True
 
     except Exception as error:
         print(f"[ERROR] Failed to save tokens: {error}")
-
