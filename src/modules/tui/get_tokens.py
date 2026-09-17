@@ -1,5 +1,6 @@
-from modules.file_modules import write_json
+from modules.file_modules import write_json, read_json
 from config.tokens import get_token_username
+from pprint import pprint
 
 def get_primary_token():
     """
@@ -26,6 +27,11 @@ def get_primary_token():
         print(f"[SUCCESS] Primary token added for '{username}'.")
         return
     
+from pprint import pprint
+from modules.file_modules import write_json, read_json
+from config.tokens import get_token_username
+
+
 def get_secondary_tokens():
     """
     Get and validate multiple secondary GitHub tokens.
@@ -33,20 +39,32 @@ def get_secondary_tokens():
     Press Enter without entering a token to finish.
     Secondary tokens are optional.
     """
-    secondary_tokens = {}
+    file_path = "config/secondary_tokens.json"
+
+    try: # Load existing tokens if file exists
+        secondary_tokens = read_json(file_path)
+        if not isinstance(secondary_tokens, dict):
+            secondary_tokens = {}
+    except FileNotFoundError:
+        secondary_tokens = {}
 
     print("\nEnter secondary GitHub tokens.")
     print("[INFO] Using secondary tokens is recommended, but not necessary.\n"
           "[HINT] Press Enter without entering a token to finish.\n")
+
+    if secondary_tokens:
+        print("Existing secondary tokens:")
+        pprint(secondary_tokens)
+        print()
 
     while True:
         token = input("Enter secondary GitHub token: ").strip()
 
         if not token:
             break
-
+        # Skip duplicate token
         if token in secondary_tokens.values():
-            print("[WARN] This token has already been added.")
+            print("[WARNING] This token has already been added.")
             continue
 
         username = get_token_username(token)
@@ -55,29 +73,31 @@ def get_secondary_tokens():
             print("[ERROR] Invalid GitHub token.")
             print("[HINT] Please check the token and try again.\n")
             continue
-
+        # Skip duplicate username
         if username in secondary_tokens:
-            print(f"[WARN] A token for '{username}' has already been added.")
+            print(f"[WARNING] A token for '{username}' has already been added.")
             continue
 
         secondary_tokens[username] = token
-        print(f"[SUCCESS] Token for '{username}' received successfully.\n")
+        print(f"[SUCCESS] Token for '{username}' added successfully.\n")
 
     if not secondary_tokens:
         print("[INFO] No secondary tokens were added.")
-        return
+        return {}
 
-    save_tokens_json("config/secondary_tokens.json", secondary_tokens)
-    return
+    if not save_tokens_json(file_path, secondary_tokens):
+        print("[ERROR] Secondary tokens could not be saved.")
+        return {}
 
-def save_tokens_json(file_path:str, data:dict):
+    return secondary_tokens
+
+
+def save_tokens_json(file_path: str, data: dict) -> bool:
     """
     Save token data to a JSON file.
     """
-
     try:
         write_json(file_path, data)
         return True
-
     except Exception as error:
         print(f"[ERROR] Failed to save tokens: {error}")
