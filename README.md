@@ -14,7 +14,3 @@ TODO:
 <br>Since those data can be large, I suggest using a simple text file instead of global variables, because variables are in RAM and the files are on disk
 
 ---
-
-There are some issues with token management and tokens username extraction.
-The first release will be just a MVP, and more professional methods will replace the old ones in future versions.
-It also includes other configuration adjustments.
