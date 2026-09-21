@@ -1,3 +1,7 @@
+# Token files
+secondary_tokens.json
+primary_token.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
