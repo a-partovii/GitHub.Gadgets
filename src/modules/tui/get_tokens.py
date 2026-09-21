@@ -27,10 +27,6 @@ def get_primary_token():
         print(f"[SUCCESS] Primary token added for '{username}'.")
         return
     
-from pprint import pprint
-from modules.file_modules import write_json, read_json
-from config.tokens import get_token_username
-
 
 def get_secondary_tokens():
     """
