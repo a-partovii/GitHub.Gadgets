@@ -1,39 +1,17 @@
-"""
-Put your GitHub Personal Access Tokens in the dictionaries below.
-The key is just a name to identify each token, and the value is the token itself.
-
-You can add multiple secondary tokens to spread API requests between them.
-This helps reduce rate limiting and lowers the risk of getting blocked.
-
-The primary token is used for modifying actions (such as starring or following).
-The secondary tokens are only used for doing background tasks.
-
-Using secondary tokens is optional, but recommended.
-"""
-
-# The main GitHub personal access token for modifying tasks
-primary_token = {
-    "name": "ghp_####################################" 
-}
-
-# The secondary GitHub personal access tokens to help proccess
-secondary_tokens = {
-    "name1": "ghp_####################################",
-    "name2": "token2",
-    "name3": "token3"
-}
-# ----------------------------------------------------------------------------
 from modules.file_modules import read_file, write_file
 from modules.major_modules.send_request import send_request
 
+primary_token = {}
+secondary_tokens = {}
+# ----------------------------------------------------------------------------
 def make_headers(token):
     return {
     "Authorization": f"Bearer {token}",
     "Accept": "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28"
 }
+
 # ----------------------------------------------------------------------------
-# Temporary method — improvements coming in next updates
 def get_token_username(token:str) -> str:
     """
     Returns the GitHub username of a given GitHub access token.
@@ -62,7 +40,7 @@ def set_token_username(tokens_dict:dict):
 
     Args:
         tokens_dict (dict): Dictionary in format {username_placeholder: token}
-    
+
     Returns:
         None, updates 'tokens_dict' in place.
     """
@@ -73,20 +51,17 @@ def set_token_username(tokens_dict:dict):
         except Exception as error:
             print(f"[ERROR] Failed to set username for token '{key}': {error}")
 
-set_token_username(primary_token)
-
 # ----------------------------------------------------------------------------
-
 def token_manager(tokens_dict):
     """
     Manages round-robin rotation of non-duplicate tokens from a dictionary (secondary_tokens).
 
     Reads token index from the file, returns the token,
     and updates the index file for next calls.
-    
+
     Args:
         tokens_dict (dict): Dictionary containing tokens as values
-        
+
     Returns:
         str or None: Next token in sequence, None if dict is empty
     """
@@ -97,15 +72,15 @@ def token_manager(tokens_dict):
         if primary_token:
             token_list = list(primary_token.values())
             length_token_list = len(token_list)
-            
+
         else:
             print("Error: both primary and secondary tokens are empty!")
             return None
-        
+
     # If there is only one token, just return it
     elif length_token_list == 1:
         return token_list[0]
-    
+
     # Read current token index from file
     index = int(read_file(file_path="config/.token_manager_index_assist.ghg")[0])
     token = token_list[index]
