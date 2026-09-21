@@ -1,10 +1,12 @@
+from modules.major_modules import load_tokens
 from modules.tui import show_menu
 from modules.operations import (
                             follow_submenu,
                             unfollow_submenu,
                             extract_submenu,
-                           config_submenu)
-                            
+                            config_submenu)
+load_tokens()
+
 main_menu = {
     "1": {"label": "Follow", "action": lambda: show_menu(follow_submenu)},
     "2": {"label": "Unfollow", "action": lambda:show_menu(unfollow_submenu)},
