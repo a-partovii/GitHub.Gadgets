@@ -2,6 +2,10 @@
 secondary_tokens.json
 primary_token.json
 
+# My data 
+output/*
+!output/.gitkeep
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
