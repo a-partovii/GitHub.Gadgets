@@ -1,10 +1,13 @@
-# # Token files
+# Token files
 secondary_tokens.json
 primary_token.json
 
 # My data 
 output/*
 !output/.gitkeep
+whitelist.txt
+greylist.txt
+blacklist.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
