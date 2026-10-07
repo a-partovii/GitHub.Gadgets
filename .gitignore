@@ -1,6 +1,6 @@
 # # Token files
-# secondary_tokens.json
-# primary_token.json
+secondary_tokens.json
+primary_token.json
 
 # My data 
 output/*
