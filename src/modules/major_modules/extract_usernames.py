@@ -1,4 +1,3 @@
-from config import secondary_tokens, token_manager, make_headers
 from modules.utils import delay, response_error_handler
 from modules.file_modules import write_file, filename_datetime
 from .send_request import send_request
@@ -24,6 +23,8 @@ def extract_usernames(
         list[str] | str | bool: List of usernames or `file_path` on output_type="file" 
         or False on error.
     """
+    from modules.tokens import secondary_tokens, token_manager
+    
     if output_type == "file":
         file_path = f"outputs/({target_username}){source} {filename_datetime()}"
 
@@ -36,9 +37,9 @@ def extract_usernames(
     while True:
         # per_page = 100, max items per request
         url = f"https://api.github.com/users/{target_username}/{source}?per_page=100&page={page}"
-        headers = make_headers(token_manager(secondary_tokens))
+        token = token_manager(secondary_tokens)
 
-        response = send_request("get", url, headers)
+        response = send_request("get", url, token)
 
         # Response handling
         if response is False:

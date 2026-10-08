@@ -1,6 +1,5 @@
 from modules.file_modules import read_file
 from modules.utils import filter_list, deduplicate_list_content
-from config.tokens import primary_token
 from .extract_usernames import extract_usernames
 import random
 
@@ -14,6 +13,7 @@ def extract_bulk_usernames_to_follow(limit_count:int) -> list:
     Returns:
         list[str] | bool: Filtered usernames list or False on error.
     """
+    from modules.tokens import primary_token
     try: 
         # Extract first list of usernames (hard coded source)
         target_username = random.choice(["a-partovii", "torvalds", "gaearon", "yyx990803", "karpathy",
@@ -27,7 +27,7 @@ def extract_bulk_usernames_to_follow(limit_count:int) -> list:
         
         my_username = next(iter(primary_token))
         my_following = set(extract_usernames(my_username, "following", show_message=False) or [])
-        blacklist = set(read_file("config/blacklist.txt") or [])
+        blacklist = set(read_file("app_data/blacklist.txt") or [])
 
         while True: # Loop to ensure we have at least `limit_count` usernames after filtering
             usernames_list = deduplicate_list_content(usernames_list)
