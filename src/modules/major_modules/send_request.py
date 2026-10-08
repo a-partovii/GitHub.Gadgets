@@ -4,7 +4,7 @@ from modules.utils import network_error_handler, delay
 def send_request(
           method:str, 
           url:str, 
-          headers:dict, 
+          token:str, 
           max_retries:int =10, 
           network_timeout:int =10) -> req.Response | bool :
     """
@@ -20,6 +20,12 @@ def send_request(
         Returns:
             req.Response | bool: Response on success, False on failure.
     """
+    headers ={
+    "Authorization": f"Bearer {token}",
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28"
+    }
+
     for _ in range(0, max_retries) : # Retry loop for network failures
             try:
                 response = req.request(method=method, url=url, headers=headers, timeout=network_timeout)
