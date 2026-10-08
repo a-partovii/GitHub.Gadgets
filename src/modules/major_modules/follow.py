@@ -1,4 +1,3 @@
-from config import primary_token, make_headers, token_manager
 from modules.utils import delay_and_super_delay, filter_file, filter_list, response_error_handler
 from modules.file_modules import write_file, read_file, delete_file, check_file_exists
 from .send_request import send_request
@@ -21,27 +20,28 @@ def follow(
     Returns:
         bool: True if the process completed successfully, False otherwise.
     """
+    from modules.tokens import primary_token, token_manager
 
     # Filter usernames based on the "blacklist.txt" file
     if skip_blacklist:
-        usernames = filter_list(usernames, read_file("config/blacklist.txt"))
+        usernames = filter_list(usernames, read_file("app_data/blacklist.txt"))
                         
     if skip_greylist:
-        usernames = filter_list(usernames, read_file("config/greylist.txt"))
+        usernames = filter_list(usernames, read_file("app_data/greylist.txt"))
         
     if skip_followed: # Filter accounts already followed 
         my_username = next(iter(primary_token))
         usernames = filter_list(usernames, extract_usernames(my_username, "following", show_message=False)) 
 
     if save_progress: # Save an initial file, so the process can be resumed if interrupted
-        progress_file = "outputs/.follow_in_progress.ghg"
+        progress_file = "app_data/states/.follow_in_progress.ghg"
         write_file(progress_file, usernames, writing_mode="w")
 
-    headers = make_headers(token_manager(primary_token))
+    token = token_manager(primary_token)
     total = 0 # Total followed accounts
     for username in usernames:
         url = f"https://api.github.com/user/following/{username}"
-        response = send_request("put", url, headers)
+        response = send_request("put", url, token)
 
         # Response handling
         if response is False:
@@ -87,7 +87,7 @@ def continue_follow_progress() -> bool:
         bool: True if the follow process was resumed, False otherwise.
     """
     try:
-        if not check_file_exists("outputs/.follow_in_progress.ghg"):
+        if not check_file_exists("app_data/states/.follow_in_progress.ghg"):
             return False
 
         user_input = input("A follow progress file was found from your last action.\n"
@@ -95,7 +95,7 @@ def continue_follow_progress() -> bool:
 
         if user_input in {"y", "yes"}:
             follow(
-                usernames=read_file("outputs/.follow_in_progress.ghg"),
+                usernames=read_file("app_data/states/.follow_in_progress.ghg"),
                 save_progress=True,
                 skip_blacklist=False,
                 skip_followed=False)
