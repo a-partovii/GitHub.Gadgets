@@ -1,4 +1,5 @@
 import json
+import os
 
 def write_json(file_path:str, input_data, writing_mode:str = "w", indent: int = 4):
     """
@@ -13,7 +14,10 @@ def write_json(file_path:str, input_data, writing_mode:str = "w", indent: int = 
     """
 
     if writing_mode not in {"w", "x"}:
-        raise ValueError("writing_mode must be 'w' or 'x'")
+        raise ValueError("writing_mode must be \'w\' or \'x\'")
+
+    # Ensure parent directories exist before writing
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
     try:
         with open(file_path, writing_mode, encoding="utf-8") as file:
@@ -24,7 +28,7 @@ def write_json(file_path:str, input_data, writing_mode:str = "w", indent: int = 
 
     except FileNotFoundError:
         raise FileNotFoundError(
-            f"[ERROR] Couldn't find: {file_path}"
+            f"[ERROR] Couldn\'t find: {file_path}"
         )
 
     except PermissionError:
