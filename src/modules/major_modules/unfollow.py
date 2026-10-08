@@ -1,4 +1,3 @@
-from config import primary_token, make_headers, token_manager
 from modules.utils import delay_and_super_delay, filter_file, filter_list, response_error_handler
 from modules.file_modules import write_file, read_file, delete_file, check_file_exists
 from .send_request import send_request
@@ -21,23 +20,24 @@ def unfollow(
     Returns:
         bool: True if process completed, False on failure.
     """
+    from modules.tokens import primary_token, token_manager
     # Filter usernames based on the "whitelist.txt" file
     if skip_whitelist:
-        usernames = filter_list(usernames, read_file("config/whitelist.txt"))
+        usernames = filter_list(usernames, read_file("app_data/whitelist.txt"))
 
     if skip_non_followed: # Skip accounts not currently followed
         my_username = next(iter(primary_token))
         usernames = filter_list(usernames, extract_usernames(my_username, "followers", show_message=False)) 
 
     if save_progress: # Save an initial file, so the process can be resumed if interrupted
-        progress_file = "outputs/.unfollow_in_progress.ghg"
+        progress_file = "app_data/states/.unfollow_in_progress.ghg"
         write_file(progress_file, usernames, writing_mode="w")
 
-    headers = make_headers(token_manager(primary_token))
+    token = token_manager(primary_token)
     total = 0 # Total unfollowed accounts
     for username in usernames:
         url = f"https://api.github.com/user/following/{username}"
-        response = send_request("delete", url, headers)
+        response = send_request("delete", url, token)
 
         # Response handling
         if response is False:
@@ -78,7 +78,7 @@ def continue_unfollow_progress() -> bool:
         bool: True if the unfollow process was resumed, False otherwise.
     """
     try:
-        if not check_file_exists("outputs/.unfollow_in_progress.ghg"):
+        if not check_file_exists("app_data/states/.unfollow_in_progress.ghg"):
             return False
 
         user_input = input("A unfollow progress file was found from your last action.\n"
@@ -86,7 +86,7 @@ def continue_unfollow_progress() -> bool:
 
         if user_input in {"y", "yes"}:
             unfollow(
-                usernames=read_file("outputs/.unfollow_in_progress"),
+                usernames=read_file("app_data/states/.unfollow_in_progress"),
                 save_progress=True,
                 skip_whitelist=False,
                 skip_non_followed=False)
