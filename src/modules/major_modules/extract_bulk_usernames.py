@@ -1,6 +1,7 @@
 from modules.file_modules import read_file
 from modules.utils import filter_list, deduplicate_list_content
 from .extract_usernames import extract_usernames
+from modules.tokens import primary_token
 import random
 
 def extract_bulk_usernames_to_follow(limit_count:int) -> list:
@@ -13,7 +14,6 @@ def extract_bulk_usernames_to_follow(limit_count:int) -> list:
     Returns:
         list[str] | bool: Filtered usernames list or False on error.
     """
-    from modules.tokens import primary_token
     try: 
         # Extract first list of usernames (hard coded source)
         target_username = random.choice(["a-partovii", "torvalds", "gaearon", "yyx990803", "karpathy",

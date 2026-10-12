@@ -1,6 +1,7 @@
 from modules.utils import delay, response_error_handler
 from modules.file_modules import write_file, filename_datetime
 from .send_request import send_request
+from modules.tokens import secondary_tokens, token_manager
 
 def extract_usernames(
         target_username:str,
@@ -23,7 +24,6 @@ def extract_usernames(
         list[str] | str | bool: List of usernames or `file_path` on output_type="file" 
         or False on error.
     """
-    from modules.tokens import secondary_tokens, token_manager
     
     if output_type == "file":
         file_path = f"outputs/({target_username}){source} {filename_datetime()}"
