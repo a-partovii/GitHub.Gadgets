@@ -2,6 +2,7 @@ from modules.utils import delay_and_super_delay, filter_file, filter_list, respo
 from modules.file_modules import write_file, read_file, delete_file, check_file_exists
 from .send_request import send_request
 from .extract_usernames import extract_usernames
+from modules.tokens import primary_token, token_manager
 
 def unfollow(
         usernames:list[str],
@@ -20,7 +21,6 @@ def unfollow(
     Returns:
         bool: True if process completed, False on failure.
     """
-    from modules.tokens import primary_token, token_manager
     # Filter usernames based on the "whitelist.txt" file
     if skip_whitelist:
         usernames = filter_list(usernames, read_file("app_data/whitelist.txt"))

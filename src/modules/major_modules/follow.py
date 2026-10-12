@@ -2,6 +2,7 @@ from modules.utils import delay_and_super_delay, filter_file, filter_list, respo
 from modules.file_modules import write_file, read_file, delete_file, check_file_exists
 from .send_request import send_request
 from .extract_usernames import extract_usernames
+from modules.tokens import primary_token, token_manager
 
 def follow(
         usernames:list[str],
@@ -20,7 +21,6 @@ def follow(
     Returns:
         bool: True if the process completed successfully, False otherwise.
     """
-    from modules.tokens import primary_token, token_manager
 
     # Filter usernames based on the "blacklist.txt" file
     if skip_blacklist:
