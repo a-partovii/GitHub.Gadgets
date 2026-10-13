@@ -80,9 +80,9 @@ def reset_file_list(list_name:str, file_path:str):
         print(f"[ERROR] Failed to reset {list_name}: {error}")
 # -----------------------------------------------------------------------------------------
 config_submenu = {
-    "1": {"label": "Adjust Blacklist", "action": lambda: adjust_files_menu("Blacklist", "config/blacklist.txt")},
-    "2": {"label": "Adjust Whitelist", "action": lambda: adjust_files_menu("Whitelist", "config/whitelist.txt")},
-    "3": {"label": "Adjust Greylist", "action": lambda: adjust_files_menu("Greylist", "config/greylist.txt")},
+    "1": {"label": "Adjust Blacklist", "action": lambda: adjust_files_menu("Blacklist", "app_data/blacklist.txt")},
+    "2": {"label": "Adjust Whitelist", "action": lambda: adjust_files_menu("Whitelist", "app_data/whitelist.txt")},
+    "3": {"label": "Adjust Greylist", "action": lambda: adjust_files_menu("Greylist", "app_data/greylist.txt")},
     "4": {"label": "Manage GitHub tokens", "action": ""}
     # "0": {"label": "Back to main menu", "action": return_to_main},
 }
