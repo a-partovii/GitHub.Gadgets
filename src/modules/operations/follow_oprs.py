@@ -1,7 +1,7 @@
 from modules.major_modules import follow, extract_usernames, extract_bulk_usernames_to_follow
 from modules.file_modules import file_picker, read_file
 from modules.utils import filter_list
-from config.tokens import primary_token
+from modules.tokens import primary_token
 
 def follow_back():
     try:
