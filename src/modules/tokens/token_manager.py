@@ -1,7 +1,7 @@
 from modules.file_modules import read_file, write_file
+from modules.tokens import primary_token
 
 def token_manager(tokens_dict):
-    from modules.tokens import primary_token
     """
     Manages round-robin rotation of non-duplicate tokens from a dictionary (secondary_tokens).
 
