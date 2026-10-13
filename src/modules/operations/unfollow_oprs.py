@@ -1,7 +1,7 @@
 from modules.major_modules import unfollow, extract_usernames
 from modules.file_modules import file_picker, read_file
 from modules.utils import filter_list
-from config.tokens import primary_token
+from modules.tokens import primary_token
 
 def unfollow_non_followers():
     try:
