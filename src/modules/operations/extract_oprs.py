@@ -1,7 +1,7 @@
 from modules.major_modules import extract_usernames
 from modules.file_modules import read_file, write_file, filename_datetime
 from modules.utils import filter_list
-from config.tokens import primary_token
+from modules.tokens import primary_token
 from modules.tui import print_in_columns, ask_output_type
 
 def extract_your_followers():
