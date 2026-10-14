@@ -1,6 +1,29 @@
 from modules.file_modules import write_json, read_json
-from config.tokens import get_token_username
 from pprint import pprint
+
+def get_token_username(token:str) -> str:
+    """
+    Returns the GitHub username of a given GitHub access token.
+
+    Args:
+        token (str): A GitHub Personal Access Token (PAT) or OAuth token.
+
+    Returns:
+        str: The login (username) of the token owner.
+    """
+    from modules.major_modules import send_request
+
+    url = "https://api.github.com/user"
+    try:
+        response = send_request("get", url, token)
+        response.raise_for_status()
+
+        user_data = response.json()
+        return user_data["login"]
+
+    except Exception as error:
+        print(f"[ERROR] Failed to fetch the token username: {error}")
+        return None
 
 def get_primary_token():
     """
@@ -15,18 +38,17 @@ def get_primary_token():
 
         username = get_token_username(token)
 
-        if username is None:
+        if not username:
             print("[ERROR] Invalid GitHub token.")
             print("[HINT] Please check the token and try again.\n")
             continue
 
         primary_token = {username: token}
 
-        save_tokens_json("config/primary_token.json", primary_token)
+        save_tokens_json("app_data/config/primary_token.json", primary_token)
 
         print(f"[SUCCESS] Primary token added for '{username}'.")
         return
-    
 
 def get_secondary_tokens():
     """
@@ -35,7 +57,7 @@ def get_secondary_tokens():
     Press Enter without entering a token to finish.
     Secondary tokens are optional.
     """
-    file_path = "config/secondary_tokens.json"
+    file_path = "app_data/config/secondary_tokens.json"
 
     try: # Load existing tokens if file exists
         secondary_tokens = read_json(file_path)
@@ -65,7 +87,7 @@ def get_secondary_tokens():
 
         username = get_token_username(token)
 
-        if username is None:
+        if not username:
             print("[ERROR] Invalid GitHub token.")
             print("[HINT] Please check the token and try again.\n")
             continue
@@ -84,7 +106,6 @@ def get_secondary_tokens():
     if not save_tokens_json(file_path, secondary_tokens):
         print("[ERROR] Secondary tokens could not be saved.")
         return {}
-
     return secondary_tokens
 
 
@@ -97,3 +118,4 @@ def save_tokens_json(file_path: str, data: dict) -> bool:
         return True
     except Exception as error:
         print(f"[ERROR] Failed to save tokens: {error}")
+        return False
