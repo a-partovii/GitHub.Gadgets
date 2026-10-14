@@ -1,4 +1,4 @@
-from modules.major_modules import load_tokens
+from modules.tokens import load_tokens
 from modules.tui import show_menu
 from modules.operations import (
                             follow_submenu,
