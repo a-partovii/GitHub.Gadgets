@@ -4,11 +4,7 @@ primary_token.json
 
 # My data 
 output/*
-!output/.gitkeep
-whitelist.txt
-greylist.txt
-blacklist.txt
-.token_manager_index_assist
+app_data/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
