@@ -1,7 +1,6 @@
 from modules.file_modules import read_file
-from modules.utils import filter_list, deduplicate_list_content
+from modules.utils import filter_list, deduplicate_list_content, my_following
 from .extract_usernames import extract_usernames
-from modules.tokens import primary_token
 import random
 
 def extract_bulk_usernames_to_follow(limit_count:int) -> list:
@@ -25,14 +24,13 @@ def extract_bulk_usernames_to_follow(limit_count:int) -> list:
                                 limit_count=limit_count,
                                 show_message=False)
         
-        my_username = next(iter(primary_token))
-        my_following = set(extract_usernames(my_username, "following", show_message=False) or [])
+        my_following_list = set(my_following() or [])
         blacklist = set(read_file("app_data/blacklist.txt") or [])
 
         while True: # Loop to ensure we have at least `limit_count` usernames after filtering
             usernames_list = deduplicate_list_content(usernames_list)
             spare_list = usernames_list.copy() # Save as a fallback source
-            usernames_list = filter_list(usernames_list, my_following)
+            usernames_list = filter_list(usernames_list, my_following_list)
             usernames_list = filter_list(usernames_list, blacklist)
 
             # If after filtering we still have fewer than the desired count,
