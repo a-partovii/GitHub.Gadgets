@@ -1,4 +1,4 @@
-from modules.major_modules import extract_usernames
+from modules.major_modules.extract_usernames import extract_usernames
 from modules.file_modules import read_file, write_file, check_file_exists
 from modules.tokens import primary_token
 
