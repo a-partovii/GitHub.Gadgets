@@ -1,10 +1,12 @@
 from modules.tokens import load_tokens
 from modules.tui import show_menu
+from modules.utils import clear_temp
 from modules.operations import (
                             follow_submenu,
                             unfollow_submenu,
                             extract_submenu,
                             config_submenu)
+clear_temp()
 load_tokens()
 
 main_menu = {
