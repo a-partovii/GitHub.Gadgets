@@ -1,15 +1,10 @@
 from modules.major_modules import follow, extract_usernames, extract_bulk_usernames_to_follow
 from modules.file_modules import file_picker, read_file
-from modules.utils import filter_list
-from modules.tokens import primary_token
+from modules.utils import filter_list, my_following, my_followers
 
 def follow_back():
     try:
-        my_username = next(iter(primary_token))
-        my_followers = extract_usernames(my_username, "followers")
-        my_following = extract_usernames(my_username, "following")
-
-        usernames = filter_list(my_followers, my_following)
+        usernames = filter_list(my_followers(), my_following())
         follow(usernames)
     except:
         pass

@@ -1,15 +1,10 @@
 from modules.major_modules import unfollow, extract_usernames
 from modules.file_modules import file_picker, read_file
-from modules.utils import filter_list
-from modules.tokens import primary_token
+from modules.utils import filter_list, my_followers, my_following
 
 def unfollow_non_followers():
     try:
-        my_username = next(iter(primary_token))
-        my_following = extract_usernames(my_username, "following")
-        my_followers = extract_usernames(my_username, "followers")
-
-        usernames = filter_list(my_following, my_followers)
+        usernames = filter_list(my_following(), my_followers())
         unfollow(usernames)
     except:
         pass
