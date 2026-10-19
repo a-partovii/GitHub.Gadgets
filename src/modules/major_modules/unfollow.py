@@ -1,4 +1,4 @@
-from modules.utils import delay_and_super_delay, filter_file, filter_list, response_error_handler
+from modules.utils import delay_and_super_delay, filter_file, filter_list, response_error_handler, my_followers
 from modules.file_modules import write_file, read_file, delete_file, check_file_exists
 from .send_request import send_request
 from .extract_usernames import extract_usernames
@@ -26,8 +26,7 @@ def unfollow(
         usernames = filter_list(usernames, read_file("app_data/whitelist.txt"))
 
     if skip_non_followed: # Skip accounts not currently followed
-        my_username = next(iter(primary_token))
-        usernames = filter_list(usernames, extract_usernames(my_username, "followers", show_message=False)) 
+        usernames = filter_list(usernames, my_followers()) 
 
     if save_progress: # Save an initial file, so the process can be resumed if interrupted
         progress_file = "app_data/states/.unfollow_in_progress.ghg"
