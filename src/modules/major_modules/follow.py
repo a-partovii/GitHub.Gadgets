@@ -1,4 +1,4 @@
-from modules.utils import delay_and_super_delay, filter_file, filter_list, response_error_handler
+from modules.utils import delay_and_super_delay, filter_file, filter_list, my_following, response_error_handler
 from modules.file_modules import write_file, read_file, delete_file, check_file_exists
 from .send_request import send_request
 from .extract_usernames import extract_usernames
@@ -30,8 +30,7 @@ def follow(
         usernames = filter_list(usernames, read_file("app_data/greylist.txt"))
         
     if skip_followed: # Filter accounts already followed 
-        my_username = next(iter(primary_token))
-        usernames = filter_list(usernames, extract_usernames(my_username, "following", show_message=False)) 
+        usernames = filter_list(usernames, my_following()) 
 
     if save_progress: # Save an initial file, so the process can be resumed if interrupted
         progress_file = "app_data/states/.follow_in_progress.ghg"
