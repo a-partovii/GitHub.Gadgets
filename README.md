@@ -10,7 +10,5 @@ TODO:
 
 2. Add a few lightweight, random requests between the main requests to break up consecutive repeated requests and potentially reduce the risk of being flagged or banned.
 
-3. Use a temp file like a global variable for holding data such as my_followers, my_following, etc; If it exists, then use it instead.
-<br>Since those data can be large, I suggest using a simple text file instead of global variables, because variables are in RAM and the files are on disk
 
 ---
